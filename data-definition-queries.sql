@@ -95,7 +95,7 @@ CREATE TABLE Library (
 INSERT INTO Games (title, releaseDate, genre, platform, avgRating, copiesSold)
 VALUES 
     ('The Legend of Zelda: Breath of the Wild', '2017-03-03', 'Adventure', 'Nintendo Switch', 9.7, 2000000), -- gameID = 1
-    ('Cyberpunk 2077', '2020-12-10', 'RPG', 'PC', 7.5, 1300000),                                            -- gameID = 2
+    ('Cyberpunk 2077', '2020-12-10', 'RPG', 'PC', 7.5, 1300000),                                             -- gameID = 2
     ('Among Us', '2018-06-15', 'Party', 'Mobile', 8.2, 500000),                                              -- gameID = 3
     ('God of War', '2018-04-20', 'Action', 'PlayStation', 9.6, 1500000),                                     -- gameID = 4
     ('Minecraft', '2011-11-18', 'Sandbox', 'PC', 9.3, 3000000);                                              -- gameID = 5
