@@ -76,9 +76,9 @@ CREATE TABLE Reviews (
 CREATE TABLE Wishlist (
     customerID INT NOT NULL,
     gameID INT NOT NULL,
-    PRIMARY KEY (customerID, gameID)
-    FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE,
-    FOREIGN KEY (gameID) REFERENCES Games(gamesID) ON DELETE CASCADE
+    PRIMARY KEY (customerID, gameID),
+    FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
+    FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
 
 -- Library table
@@ -87,8 +87,8 @@ CREATE TABLE Library (
     customerID INT NOT NULL,
     gameID INT NOT NULL,
     PRIMARY KEY (customerID, gameID),
-    FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE,
-    FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE
+    FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
+    FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
 
 -- Data Insertion for Games table
@@ -131,7 +131,7 @@ VALUES
 INSERT INTO Reviews (gameID, customerID, rating, comment)
 VALUES 
     (1, 1, 9, 'An incredible open-world experience with stunning visuals. Must play game.'),
-    (2, 2, 7, 'Fun gameplay but lots of bugs at launch. Although it had rough start, game overral is amazing.'),
+    (2, 2, 7, 'Fun gameplay but lots of bugs at launch. Although it had rough start, game overall is amazing.'),
     (3, 3, 8, 'Perfect party game to play with friends. Easy game for anyone to be a part of for all ages.'),
     (4, 4, 10, 'An intense and emotional action-adventure journey. Game could be best game of our generation.'),
     (5, 5, 9, 'Endlessly creative and fun sandbox game. Could play this game for hours on hours.');
