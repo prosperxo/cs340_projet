@@ -137,13 +137,28 @@ VALUES
     ((SELECT saleID FROM Sales WHERE customerID = 5), (SELECT gameID FROM Games WHERE title = 'Minecraft'), 1, 39.99);
 
 -- Data Insertion for Reviews table
-INSERT INTO Reviews (gameID, customerID, rating, comment)
+-- Data Insertion for Reviews table
+INSERT INTO Reviews (gameID, customerID, rating, comment, reviewDate)
 VALUES 
-    ((SELECT gameID FROM Games WHERE title = 'The Legend of Zelda: Breath of the Wild'), 1, 9, 'An incredible open-world experience with stunning visuals. Must play game.'),
-    ((SELECT gameID FROM Games WHERE title = 'Cyberpunk 2077'), 2, 7, 'Fun gameplay but lots of bugs at launch. Although it had a rough start, the game overall is amazing.'),
-    ((SELECT gameID FROM Games WHERE title = 'Among Us'), 3, 8, 'Perfect party game to play with friends. Easy game for anyone to be a part of for all ages.'),
-    ((SELECT gameID FROM Games WHERE title = 'God of War'), 4, 10, 'An intense and emotional action-adventure journey. Could be the best game of our generation.'),
-    ((SELECT gameID FROM Games WHERE title = 'Minecraft'), 5, 9, 'Endlessly creative and fun sandbox game. Could play this game for hours on end.');
+    ((SELECT gameID FROM Games WHERE title = 'The Legend of Zelda: Breath of the Wild'), 
+     (SELECT customerID FROM Customers WHERE email = 'alice.brown@example.com'), 
+     9, 'An incredible open-world experience.', '2023-06-21 12:30:00'),
+    
+    ((SELECT gameID FROM Games WHERE title = 'Cyberpunk 2077'), 
+     (SELECT customerID FROM Customers WHERE email = 'bob.smith@example.com'), 
+     7, 'Great gameplay but had bugs.', '2023-06-22 13:45:00'),
+    
+    ((SELECT gameID FROM Games WHERE title = 'Among Us'), 
+     (SELECT customerID FROM Customers WHERE email = 'charlie.jones@example.com'), 
+     8, 'Perfect party game.', '2023-06-23 15:20:00'),
+    
+    ((SELECT gameID FROM Games WHERE title = 'God of War'), 
+     (SELECT customerID FROM Customers WHERE email = 'diana.johnson@example.com'), 
+     10, NULL, '2023-06-24 09:30:00'),  -- NULL comment, rating-only review
+
+    ((SELECT gameID FROM Games WHERE title = 'Minecraft'), 
+     (SELECT customerID FROM Customers WHERE email = 'edward.lee@example.com'), 
+     9, 'Endlessly creative.', '2023-06-25 10:50:00');
 
 -- Data Insertion for Wishlist table
 -- recall customerID is set to autoincrement starting at 1 so Alice would be 1, Bob 2, etc...
