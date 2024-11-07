@@ -40,9 +40,11 @@ CREATE TABLE Customers (
 -- no transitivie dependencies, so Sales is in 3NF 
 CREATE TABLE Sales (
     saleID INT AUTO_INCREMENT PRIMARY KEY,
-    customerID INT NOT NULL,
+    customerID INT NULL,
     orderDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     totalAmount DECIMAL(10, 2) NOT NULL,
+
+
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
 
@@ -54,6 +56,8 @@ CREATE TABLE OrderItems (
     gameID INT NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
     price DECIMAL(10, 2) NOT NULL,
+
+
     FOREIGN KEY (saleID) REFERENCES Sales(saleID) ON DELETE CASCADE,
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE
 );
@@ -65,8 +69,10 @@ CREATE TABLE Reviews (
     gameID INT NOT NULL,
     customerID INT NOT NULL,
     rating INT NOT NULL CHECK (rating BETWEEN 0 AND 10),
-    comment TEXT,
+    comment TEXT NULL,
     reviewDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
@@ -86,6 +92,8 @@ CREATE TABLE Wishlist (
 CREATE TABLE Library (
     customerID INT NOT NULL,
     gameID INT NOT NULL,
+
+
     PRIMARY KEY (customerID, gameID),
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
@@ -101,66 +109,79 @@ VALUES
     ('Minecraft', '2011-11-18', 'Sandbox', 'PC', 9.3, 3000000);                                              -- gameID = 5
 
 -- Data Insertion for Customers table
+-- Data Insertion for Customers table
 INSERT INTO Customers (email, password, firstName, lastName)
 VALUES 
-    ('alice.brown@example.com', 'password1', 'Alice', 'Brown'),      -- customerID = 1
-    ('bob.smith@example.com', 'password2', 'Bob', 'Smith'),          -- customerID = 2
-    ('charlie.jones@example.com', 'password3', 'Charlie', 'Jones'),  -- customerID = 3
-    ('diana.johnson@example.com', 'password4', 'Diana', 'Johnson'),  -- customerID = 4
-    ('edward.lee@example.com', 'password5', 'Edward', 'Lee');        -- customerID = 5
+    ('alice.brown@example.com', 'password1', 'Alice', 'Brown'),
+    ('bob.smith@example.com', 'password2', 'Bob', 'Smith'),
+    ('charlie.jones@example.com', 'password3', 'Charlie', 'Jones'),
+    ('diana.johnson@example.com', 'password4', 'Diana', 'Johnson'),
+    ('edward.lee@example.com', 'password5', 'Edward', 'Lee');
 
 -- Data Insertion for Sales table
 INSERT INTO Sales (customerID, totalAmount)
 VALUES 
-    (1, 59.99),
-    (2, 49.99),
-    (3, 29.99),
-    (4, 19.99),
-    (5, 39.99);
+    ((SELECT customerID FROM Customers WHERE email = 'alice.brown@example.com'), 59.99),
+    ((SELECT customerID FROM Customers WHERE email = 'bob.smith@example.com'), 49.99),
+    ((SELECT customerID FROM Customers WHERE email = 'charlie.jones@example.com'), 29.99),
+    ((SELECT customerID FROM Customers WHERE email = 'diana.johnson@example.com'), 19.99),
+    ((SELECT customerID FROM Customers WHERE email = 'edward.lee@example.com'), 39.99);
 
 -- Data Insertion for OrderItems table
 INSERT INTO OrderItems (saleID, gameID, quantity, price)
 VALUES 
-    (1, 1, 1, 59.99),
-    (2, 2, 1, 49.99),
-    (3, 3, 1, 29.99),
-    (4, 4, 1, 19.99),
-    (5, 5, 1, 39.99);
+    ((SELECT saleID FROM Sales WHERE customerID = 1), (SELECT gameID FROM Games WHERE title = 'The Legend of Zelda: Breath of the Wild'), 1, 59.99),
+    ((SELECT saleID FROM Sales WHERE customerID = 2), (SELECT gameID FROM Games WHERE title = 'Cyberpunk 2077'), 1, 49.99),
+    ((SELECT saleID FROM Sales WHERE customerID = 3), (SELECT gameID FROM Games WHERE title = 'Among Us'), 1, 29.99),
+    ((SELECT saleID FROM Sales WHERE customerID = 4), (SELECT gameID FROM Games WHERE title = 'God of War'), 1, 19.99),
+    ((SELECT saleID FROM Sales WHERE customerID = 5), (SELECT gameID FROM Games WHERE title = 'Minecraft'), 1, 39.99);
 
 -- Data Insertion for Reviews table
 INSERT INTO Reviews (gameID, customerID, rating, comment)
 VALUES 
-    (1, 1, 9, 'An incredible open-world experience with stunning visuals. Must play game.'),
-    (2, 2, 7, 'Fun gameplay but lots of bugs at launch. Although it had rough start, game overall is amazing.'),
-    (3, 3, 8, 'Perfect party game to play with friends. Easy game for anyone to be a part of for all ages.'),
-    (4, 4, 10, 'An intense and emotional action-adventure journey. Game could be best game of our generation.'),
-    (5, 5, 9, 'Endlessly creative and fun sandbox game. Could play this game for hours on hours.');
+    ((SELECT gameID FROM Games WHERE title = 'The Legend of Zelda: Breath of the Wild'), 1, 9, 'An incredible open-world experience with stunning visuals. Must play game.'),
+    ((SELECT gameID FROM Games WHERE title = 'Cyberpunk 2077'), 2, 7, 'Fun gameplay but lots of bugs at launch. Although it had a rough start, the game overall is amazing.'),
+    ((SELECT gameID FROM Games WHERE title = 'Among Us'), 3, 8, 'Perfect party game to play with friends. Easy game for anyone to be a part of for all ages.'),
+    ((SELECT gameID FROM Games WHERE title = 'God of War'), 4, 10, 'An intense and emotional action-adventure journey. Could be the best game of our generation.'),
+    ((SELECT gameID FROM Games WHERE title = 'Minecraft'), 5, 9, 'Endlessly creative and fun sandbox game. Could play this game for hours on end.');
 
 -- Data Insertion for Wishlist table
 -- recall customerID is set to autoincrement starting at 1 so Alice would be 1, Bob 2, etc...
 INSERT INTO Wishlist (customerID, gameID)
 VALUES 
-    (1, 1),  -- Alice wishes for The Legend of Zelda
-    (1, 3),  -- Alice wishes for Among Us
-    (2, 2),  -- Bob wishes for Cyberpunk 2077
-    (3, 4),  -- Charlie wishes for God of War
-    (4, 1),  -- Diana wishes for The Legend of Zelda
-    (5, 5),  -- Edward wishes for Minecraft
-    (2, 5),  -- Bob also wishes for Minecraft
-    (3, 1);  -- Charlie also wishes for The Legend of Zelda
+    ((SELECT customerID FROM Customers WHERE email = 'alice.brown@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'The Legend of Zelda: Breath of the Wild')),  -- Alice wishes for The Legend of Zelda
+    
+    ((SELECT customerID FROM Customers WHERE email = 'alice.brown@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'Among Us')),  -- Alice wishes for Among Us
+    
+    ((SELECT customerID FROM Customers WHERE email = 'bob.smith@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'Cyberpunk 2077')),  -- Bob wishes for Cyberpunk 2077
+    
+    ((SELECT customerID FROM Customers WHERE email = 'charlie.jones@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'God of War')),  -- Charlie wishes for God of War
+    
+    ((SELECT customerID FROM Customers WHERE email = 'diana.johnson@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'The Legend of Zelda: Breath of the Wild')),  -- Diana wishes for The Legend of Zelda
 
 -- Data Insertion for Library table
 -- recall gameID is set to autoincrement starting at 1 so Zelda is 1, Cyberpunk 2, etc.
 INSERT INTO Library (customerID, gameID)
 VALUES 
-    (1, 1),  -- Alice owns The Legend of Zelda
-    (1, 5),  -- Alice owns Minecraft
-    (2, 2),  -- Bob owns Cyberpunk 2077
-    (3, 4),  -- Charlie owns God of War
-    (4, 3),  -- Diana owns Among Us
-    (5, 5),  -- Edward owns Minecraft
-    (4, 1),  -- Diana also owns The Legend of Zelda
-    (3, 2);  -- Charlie also owns Cyberpunk 2077
+    ((SELECT customerID FROM Customers WHERE email = 'alice.brown@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'The Legend of Zelda: Breath of the Wild')),  -- Alice owns The Legend of Zelda
+    
+    ((SELECT customerID FROM Customers WHERE email = 'alice.brown@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'Minecraft')),  -- Alice owns Minecraft
+    
+    ((SELECT customerID FROM Customers WHERE email = 'bob.smith@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'Cyberpunk 2077')),  -- Bob owns Cyberpunk 2077
+    
+    ((SELECT customerID FROM Customers WHERE email = 'charlie.jones@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'God of War')),  -- Charlie owns God of War
+    
+    ((SELECT customerID FROM Customers WHERE email = 'diana.johnson@example.com'), 
+     (SELECT gameID FROM Games WHERE title = 'Among Us')),  -- Diana owns Among Us
 
 -- Re-enable foreign key checks and commit the transaction
 SET FOREIGN_KEY_CHECKS=1;
