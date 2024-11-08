@@ -3,18 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Vault</title>
-    <h1 id="main_title" >Game Vault</h1>
+    <title>Game Vault - Admin Panel</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div id="header"></div>
-    <div id="content"></div>
+    <!-- Header Section -->
+    <header>
+        <h1>Game Vault Admin Panel</h1>
+        <p>Manage all aspects of your game library and customer interactions.</p>
+    </header>
+    
+    <!-- Main Navigation Links -->
+    <main>
+        <section>
+            <h2>Database Management</h2>
+            <ul>
+                <li><a href="/templates/games.hbs">Manage Games</a></li>
+                <li><a href="/templates/customers.hbs">Manage Customers</a></li>
+                <li><a href="/templates/sales.hbs">Manage Sales</a></li>
+                <li><a href="/templates/reviews.hbs">Manage Reviews</a></li>
+                <li><a href="/templates/wishlist.hbs">Manage Wishlist</a></li>
+                <li><a href="/templates/library.hbs">Manage Library</a></li>
+                <li><a href="/templates/orderItems.hbs">Manage Order Items</a></li>
+            </ul>
+        </section>
+    </main>
 
-    <!-- Include Handlebars.js and main script -->
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Andy Vo & Marat Muzaffarov. All rights reserved.</p>
+    </footer>
+
+    <!-- Include Handlebars.js and Main Script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
     <script src="index.js"></script>
-
-    <p>© 2024 Andy Vo & Marat Muzaffarov</p>
 </body>
 </html>

@@ -1,2 +1,106 @@
-<h1>Welcome to Customers Page</h1>
-<p>This is the content for the customers page.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Customers</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css" />
+    <script>
+        function showForm(action) {
+            document.getElementById('browse').style.display = (action === 'browse') ? 'block' : 'none';
+            document.getElementById('insert').style.display = (action === 'insert') ? 'block' : 'none';
+            document.getElementById('update').style.display = (action === 'update') ? 'block' : 'none';
+            document.getElementById('delete').style.display = (action === 'delete') ? 'block' : 'none';
+        }
+
+        function newCustomer() { showForm('insert'); }
+        function updateCustomer(customerID) {
+            document.getElementById('updateCustomerID').value = customerID;
+            showForm('update');
+        }
+        function deleteCustomer(customerID) {
+            document.getElementById('deleteCustomerID').value = customerID;
+            showForm('delete');
+        }
+    </script>
+</head>
+
+<body onload="showForm('browse')">
+    <h1>Manage Customers</h1>
+    [ <a href="index.html">Home</a> ]
+
+    <!-- Browse Section -->
+    <div id="browse">
+        <h2>Customer List</h2>
+        <button onclick="newCustomer()">Add New Customer</button>
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>ID</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Signup Date</th>
+            </tr>
+            <!-- Example data rows - these would be dynamically generated with server data -->
+            <tr>
+                <td><button onclick="updateCustomer(1)">Edit</button></td>
+                <td><button onclick="deleteCustomer(1)">Delete</button></td>
+                <td>1</td>
+                <td>alice@example.com</td>
+                <td>Alice</td>
+                <td>Brown</td>
+                <td>2024-01-01</td>
+            </tr>
+            <tr>
+                <td><button onclick="updateCustomer(2)">Edit</button></td>
+                <td><button onclick="deleteCustomer(2)">Delete</button></td>
+                <td>2</td>
+                <td>bob@example.com</td>
+                <td>Bob</td>
+                <td>Smith</td>
+                <td>2024-01-02</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Insert Section -->
+    <div id="insert" style="display: none;">
+        <h2>Add New Customer</h2>
+        <form method="POST" action="/addCustomer">
+            <label>Email:</label> <input type="email" name="email" required><br>
+            <label>Password:</label> <input type="password" name="password" required><br>
+            <label>First Name:</label> <input type="text" name="firstName" required><br>
+            <label>Last Name:</label> <input type="text" name="lastName" required><br>
+            <button type="submit">Add Customer</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Update Section -->
+    <div id="update" style="display: none;">
+        <h2>Update Customer</h2>
+        <form method="POST" action="/updateCustomer">
+            <input type="hidden" name="customerID" id="updateCustomerID">
+            <label>Email:</label> <input type="email" name="email" required><br>
+            <label>First Name:</label> <input type="text" name="firstName" required><br>
+            <label>Last Name:</label> <input type="text" name="lastName" required><br>
+            <label>Password:</label> <input type="password" name="password"><br>
+            <button type="submit">Save Changes</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Delete Section -->
+    <div id="delete" style="display: none;">
+        <h2>Delete Customer</h2>
+        <form method="POST" action="/deleteCustomer">
+            <input type="hidden" name="customerID" id="deleteCustomerID">
+            <p>Are you sure you want to delete this customer?</p>
+            <button type="submit">Delete</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+</body>
+</html>
