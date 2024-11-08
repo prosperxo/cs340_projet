@@ -1,6 +1,7 @@
 -- Temporarily disable foreign key constraint checks to prevent errors during the creation of tables that reference each other. 
-SET FOREIGN_KEY_CHECKS=0;
-SET AUTOCOMMIT=0;
+SET FOREIGN_KEY_CHECKS=1;
+SET AUTOCOMMIT=1;
+COMMIT;
 
 -- refresh tables to start from beginning
 DROP TABLE IF EXISTS OrderItems;
@@ -44,7 +45,6 @@ CREATE TABLE Sales (
     orderDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     totalAmount DECIMAL(10, 2) NOT NULL,
 
-
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
 
@@ -56,7 +56,6 @@ CREATE TABLE OrderItems (
     gameID INT NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
     price DECIMAL(10, 2) NOT NULL,
-
 
     FOREIGN KEY (saleID) REFERENCES Sales(saleID) ON DELETE CASCADE,
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE
@@ -72,7 +71,6 @@ CREATE TABLE Reviews (
     comment TEXT NULL,
     reviewDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
@@ -83,6 +81,7 @@ CREATE TABLE Wishlist (
     customerID INT NOT NULL,
     gameID INT NULL,
     PRIMARY KEY (customerID, gameID),
+
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
@@ -93,6 +92,7 @@ CREATE TABLE Library (
     customerID INT NOT NULL,
     gameID INT NULL,
     PRIMARY KEY (customerID, gameID),
+
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
 );
@@ -195,3 +195,7 @@ VALUES
     
     ((SELECT customerID FROM Customers WHERE email = 'diana.johnson@example.com'), 
      (SELECT gameID FROM Games WHERE title = 'Among Us')),  -- Diana owns Among Us
+
+SET FOREIGN_KEY_CHECKS=1;
+SET AUTOCOMMIT=1;
+COMMIT;

@@ -1,3 +1,7 @@
+-- Temporarily disable foreign key constraint checks to prevent errors during the creation of tables that reference each other. 
+SET FOREIGN_KEY_CHECKS=0;
+SET AUTOCOMMIT=0;
+
 -- CRUD data manipulation queries for each table
 
 -- Customers Table 
@@ -90,4 +94,5 @@ DELETE FROM Library WHERE customerID = :customerIDInput AND gameID = :gameIDInpu
 
 -- Re-enable foreign key checks and commit the transaction
 SET FOREIGN_KEY_CHECKS=1;
+SET AUTOCOMMIT=1;
 COMMIT;
