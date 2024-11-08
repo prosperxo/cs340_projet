@@ -81,7 +81,7 @@ CREATE TABLE Reviews (
 -- intersection table for M:M relationships between Customers and Games
 CREATE TABLE Wishlist (
     customerID INT NOT NULL,
-    gameID INT NOT NULL,
+    gameID INT NULL,
     PRIMARY KEY (customerID, gameID),
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
@@ -91,9 +91,7 @@ CREATE TABLE Wishlist (
 -- intersection table for M:M relationships between Customers and Games
 CREATE TABLE Library (
     customerID INT NOT NULL,
-    gameID INT NOT NULL,
-
-
+    gameID INT NULL,
     PRIMARY KEY (customerID, gameID),
     FOREIGN KEY (gameID) REFERENCES Games(gameID) ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID) ON DELETE CASCADE
