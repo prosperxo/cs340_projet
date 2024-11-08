@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Reviews</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    [ <a href="index.html">Home</a> ]
+    <h1>Manage Reviews</h1>
+    <table>
+        <tr>
+            <th>Game ID</th>
+            <th>Customer ID</th>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Review Date</th>
+            <th>Actions</th>
+        </tr>
+        <!-- Sample row, replace with dynamic data -->
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>9</td>
+            <td>An incredible open-world experience.</td>
+            <td>2023-06-21</td>
+            <td><button onclick="deleteReview(1)">Delete</button></td>
+        </tr>
+    </table>
+    <form id="reviewForm">
+        <label>Game ID:</label> <input type="number" name="gameID"><br>
+        <label>Customer ID:</label> <input type="number" name="customerID"><br>
+        <label>Rating:</label> <input type="number" step="1" min="0" max="10" name="rating"><br>
+        <label>Comment:</label> <textarea name="comment"></textarea><br>
+        <label>Review Date:</label> <input type="datetime-local" name="reviewDate"><br>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

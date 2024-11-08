@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Wishlist</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    [ <a href="index.html">Home</a> ]
+    <h1>Manage Wishlist</h1>
+    <table>
+        <tr>
+            <th>Customer ID</th>
+            <th>Game ID</th>
+            <th>Actions</th>
+        </tr>
+        <!-- Sample row, replace with dynamic data -->
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td><button onclick="deleteWishlistItem(1, 1)">Delete</button></td>
+        </tr>
+    </table>
+    <form id="wishlistForm">
+        <label>Customer ID:</label> <input type="number" name="customerID"><br>
+        <label>Game ID:</label> <input type="number" name="gameID"><br>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

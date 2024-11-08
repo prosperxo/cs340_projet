@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Order Items</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    [ <a href="index.html">Home</a> ]
+    <h1>Manage Order Items</h1>
+    <table>
+        <tr>
+            <th>Sale ID</th>
+            <th>Game ID</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        <!-- Sample row, replace with dynamic data -->
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>59.99</td>
+            <td><button onclick="deleteOrderItem(1)">Delete</button></td>
+        </tr>
+    </table>
+    <form id="orderItemForm">
+        <label>Sale ID:</label> <input type="number" name="saleID"><br>
+        <label>Game ID:</label> <input type="number" name="gameID"><br>
+        <label>Quantity:</label> <input type="number" name="quantity"><br>
+        <label>Price:</label> <input type="number" step="0.01" name="price"><br>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
