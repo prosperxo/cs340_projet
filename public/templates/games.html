@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Games</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    [ <a href="../index.html">Home</a> ]
+    <h1>Manage Games</h1>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Release Date</th>
+            <th>Genre</th>
+            <th>Platform</th>
+            <th>Avg Rating</th>
+            <th>Copies Sold</th>
+            <th>Actions</th>
+        </tr>
+        <!-- Sample row, replace with dynamic data -->
+        <tr>
+            <td>The Legend of Zelda</td>
+            <td>2017-03-03</td>
+            <td>Adventure</td>
+            <td>Nintendo Switch</td>
+            <td>9.7</td>
+            <td>2000000</td>
+            <td><button onclick="editGame(1)">Edit</button><button onclick="deleteGame(1)">Delete</button></td>
+        </tr>
+    </table>
+    <form id="gameForm">
+        <label>Title:</label> <input type="text" name="title"><br>
+        <label>Release Date:</label> <input type="date" name="releaseDate"><br>
+        <label>Genre:</label> <input type="text" name="genre"><br>
+        <label>Platform:</label> <input type="text" name="platform"><br>
+        <label>Avg Rating:</label> <input type="number" step="0.1" min="0" max="10" name="avgRating"><br>
+        <label>Copies Sold:</label> <input type="number" name="copiesSold"><br>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+    "name":"cs340_project",
+    "version":"1.0.0",
+    "description":"",
+    "main":"index.js",
+    "scripts":{
+        "test":"echo \"Error: no test specified\" && exit 1",
+        "start:forever":"forever start server.js",
+        "stop:forever":"forever stop server.js"
+    },
+    "repository":{
+        "type":"git",
+        "url":"git+https://github.com/prosperxo/cs340_projet.git"
+    },
+    "author":"Andy Vo and Marat Muzaffarov",
+    "license":"MIT",
+    "bugs":{
+        "url":"https://github.com/prosperxo/cs340_projet/issues"
+    },
+    "homepage":"https://github.com/prosperxo/cs340_projet#readme",
+    "devDependencies":{
+        "express":"^4.21.1",
+        "forever":"^4.0.3"
+    }
+}
