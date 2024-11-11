@@ -4,36 +4,104 @@
     <meta charset="UTF-8">
     <title>Manage Reviews</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <script>
+        function showForm(action) {
+            document.getElementById('browse').style.display = (action === 'browse') ? 'block' : 'none';
+            document.getElementById('insert').style.display = (action === 'insert') ? 'block' : 'none';
+            document.getElementById('update').style.display = (action === 'update') ? 'block' : 'none';
+            document.getElementById('delete').style.display = (action === 'delete') ? 'block' : 'none';
+        }
+
+        function newReview() { 
+            showForm('insert'); 
+        }
+
+        function updateReview(customerID, gameID) {
+            showForm('update');
+        }
+
+        function deleteReview(customerID, gameID) {
+            showForm('delete');
+        }
+    </script>
 </head>
 <body>
-    [ <a href="../index.html">Home</a> ]
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="games.html">Manage Games</a></li>
+            <li><a href="customers.html">Manage Customers</a></li>
+            <li><a href="library.html">Manage Library</a></li>
+            <li><a href="wishlist.html">Manage Wishlist</a></li>
+            <li><a href="reviews.html">Manage Reviews</a></li>
+            <li><a href="sales.html">Manage Sales</a></li>
+            <li><a href="orderItems.html">Manage Order Items</a></li>
+        </ul>
+    </nav>
+
     <h1>Manage Reviews</h1>
-    <table>
-        <tr>
-            <th>Game ID</th>
-            <th>Customer ID</th>
-            <th>Rating</th>
-            <th>Comment</th>
-            <th>Review Date</th>
-            <th>Actions</th>
-        </tr>
-        <!-- Sample row, replace with dynamic data -->
-        <tr>
-            <td>1</td>
-            <td>1</td>
-            <td>9</td>
-            <td>An incredible open-world experience.</td>
-            <td>2023-06-21</td>
-            <td><button onclick="deleteReview(1)">Delete</button></td>
-        </tr>
-    </table>
-    <form id="reviewForm">
-        <label>Game ID:</label> <input type="number" name="gameID"><br>
-        <label>Customer ID:</label> <input type="number" name="customerID"><br>
-        <label>Rating:</label> <input type="number" step="1" min="0" max="10" name="rating"><br>
-        <label>Comment:</label> <textarea name="comment"></textarea><br>
-        <label>Review Date:</label> <input type="datetime-local" name="reviewDate"><br>
-        <button type="submit">Save</button>
-    </form>
+
+    <!-- Browse Section -->
+    <div id="browse">
+        <h2>Review List</h2>
+        <button onclick="newReview()">Add New Review</button>
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Customer ID</th>
+                <th>Game ID</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Review Date</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>9</td>
+                <td>An incredible open-world experience.</td>
+                <td>2023-06-21</td>
+                <td><button onclick="updateReview(1, 1)">Edit</button><button onclick="deleteReview(1, 1)">Delete</button></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Insert Section -->
+    <div id="insert" style="display: none;">
+        <h2>Add to Reviews</h2>
+        <form method="POST" action="/addReview">
+            <label>Customer ID:</label> <input type="number" name="customerID" required><br>
+            <label>Game ID:</label> <input type="number" name="gameID" required><br>
+            <label>Rating:</label> <input type="number" step="0.1" min="0" max="10" name="rating" required><br>
+            <label>Comment:</label> <input type="text" name="comment"><br>
+            <label>Review Date:</label> <input type="date" name="reviewDate" required><br>
+            <button type="submit">Add to Reviews</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Update Section -->
+    <div id="update" style="display: none;">
+        <h2>Update Review</h2>
+        <form method="POST" action="/updateReview">
+            <label>Customer ID:</label> <input type="number" name="customerID" required><br>
+            <label>Game ID:</label> <input type="number" name="gameID" required><br>
+            <label>Rating:</label> <input type="number" step="0.1" min="0" max="10" name="rating" required><br>
+            <label>Comment:</label> <input type="text" name="comment"><br>
+            <label>Review Date:</label> <input type="date" name="reviewDate" required><br>
+            <button type="submit">Save Changes</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Delete Section -->
+    <div id="delete" style="display: none;">
+        <h2>Delete Review</h2>
+        <form method="POST" action="/deleteWishlistItem">
+            <p>Are you sure you want to delete this review?</p>
+            <button type="submit">Delete</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
 </body>
 </html>

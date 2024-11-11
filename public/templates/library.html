@@ -4,27 +4,92 @@
     <meta charset="UTF-8">
     <title>Manage Library</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <script>
+        function showForm(action) {
+            document.getElementById('browse').style.display = (action === 'browse') ? 'block' : 'none';
+            document.getElementById('insert').style.display = (action === 'insert') ? 'block' : 'none';
+            document.getElementById('update').style.display = (action === 'update') ? 'block' : 'none';
+            document.getElementById('delete').style.display = (action === 'delete') ? 'block' : 'none';
+        }
+
+        function newLibraryItem() { 
+            showForm('insert'); 
+        }
+
+        function updateLibraryItem(customerID, gameID) {
+            showForm('update');
+        }
+
+        function deleteLibraryItem(customerID, gameID) {
+            showForm('delete');
+        }
+    </script>
 </head>
+
 <body>
-    [ <a href="../index.html">Home</a> ]
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="games.html">Manage Games</a></li>
+            <li><a href="customers.html">Manage Customers</a></li>
+            <li><a href="library.html">Manage Library</a></li>
+            <li><a href="wishlist.html">Manage Wishlist</a></li>
+            <li><a href="reviews.html">Manage Reviews</a></li>
+            <li><a href="sales.html">Manage Sales</a></li>
+            <li><a href="orderItems.html">Manage Order Items</a></li>
+        </ul>
+    </nav>
+
     <h1>Manage Library</h1>
-    <table>
-        <tr>
-            <th>Customer ID</th>
-            <th>Game ID</th>
-            <th>Actions</th>
-        </tr>
-        <!-- Sample row, replace with dynamic data -->
-        <tr>
-            <td>1</td>
-            <td>1</td>
-            <td><button onclick="deleteLibraryItem(1, 1)">Delete</button></td>
-        </tr>
-    </table>
-    <form id="libraryForm">
-        <label>Customer ID:</label> <input type="number" name="customerID"><br>
-        <label>Game ID:</label> <input type="number" name="gameID"><br>
-        <button type="submit">Save</button>
-    </form>
+
+    <!-- Browse Section -->
+    <div id="browse">
+        <h2>Library List</h2>
+        <button onclick="newLibraryItem()">Add New Library Item</button>
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Customer ID</th>
+                <th>Game ID</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td><button onclick="updateLibraryItem(1, 1)">Edit</button><button onclick="deleteLibraryItem(1, 1)">Delete</button></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Insert Section -->
+    <div id="insert" style="display: none;">
+        <h2>Add to Library</h2>
+        <form method="POST" action="/addLibraryItem">
+            <label>Customer ID:</label> <input type="number" name="customerID" required><br>
+            <label>Game ID:</label> <input type="number" name="gameID" required><br>
+            <button type="submit">Add to Library</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Update Section -->
+    <div id="update" style="display: none;">
+        <h2>Update Library</h2>
+        <form method="POST" action="/updateLibraryItem">
+            <label>Customer ID:</label> <input type="number" name="customerID" required><br>
+            <label>Game ID:</label> <input type="number" name="gameID" required><br>
+            <button type="submit">Save Changes</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Delete Section -->
+    <div id="delete" style="display: none;">
+        <h2>Delete from Library</h2>
+        <form method="POST" action="/deleteLibraryItem">
+            <p>Are you sure you want to delete this from the library?</p>
+            <button type="submit">Delete</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
 </body>
 </html>

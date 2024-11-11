@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Customers</title>
-    <link href="css/styles.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../css/styles.css">
     <script>
         function showForm(action) {
             document.getElementById('browse').style.display = (action === 'browse') ? 'block' : 'none';
@@ -12,21 +12,35 @@
             document.getElementById('delete').style.display = (action === 'delete') ? 'block' : 'none';
         }
 
-        function newCustomer() { showForm('insert'); }
+        function newCustomer() { 
+            showForm('insert'); 
+        }
+
         function updateCustomer(customerID) {
-            document.getElementById('updateCustomerID').value = customerID;
             showForm('update');
         }
+
         function deleteCustomer(customerID) {
-            document.getElementById('deleteCustomerID').value = customerID;
             showForm('delete');
         }
     </script>
 </head>
 
 <body onload="showForm('browse')">
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="games.html">Manage Games</a></li>
+            <li><a href="customers.html">Manage Customers</a></li>
+            <li><a href="library.html">Manage Library</a></li>
+            <li><a href="wishlist.html">Manage Wishlist</a></li>
+            <li><a href="reviews.html">Manage Reviews</a></li>
+            <li><a href="sales.html">Manage Sales</a></li>
+            <li><a href="orderItems.html">Manage Order Items</a></li>
+        </ul>
+    </nav>
+
     <h1>Manage Customers</h1>
-    [ <a href="../index.html">Home</a> ]
 
     <!-- Browse Section -->
     <div id="browse">
@@ -34,31 +48,25 @@
         <button onclick="newCustomer()">Add New Customer</button>
         <table border="1" cellpadding="5">
             <tr>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>ID</th>
                 <th>Email</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Signup Date</th>
+                <th>Actions</th>
             </tr>
             <tr>
-                <td><button onclick="updateCustomer(1)">Edit</button></td>
-                <td><button onclick="deleteCustomer(1)">Delete</button></td>
-                <td>1</td>
                 <td>alice@example.com</td>
                 <td>Alice</td>
                 <td>Brown</td>
                 <td>2024-01-01</td>
+                <td><button onclick="updateCustomer(1)">Edit</button><button onclick="deleteCustomer(1)">Delete</button></td>
             </tr>
             <tr>
-                <td><button onclick="updateCustomer(2)">Edit</button></td>
-                <td><button onclick="deleteCustomer(2)">Delete</button></td>
-                <td>2</td>
                 <td>bob@example.com</td>
                 <td>Bob</td>
                 <td>Smith</td>
                 <td>2024-01-02</td>
+                <td><button onclick="updateCustomer(2)">Edit</button><button onclick="deleteCustomer(2)">Delete</button></td>
             </tr>
         </table>
     </div>
@@ -84,7 +92,7 @@
             <label>Email:</label> <input type="email" name="email" required><br>
             <label>First Name:</label> <input type="text" name="firstName" required><br>
             <label>Last Name:</label> <input type="text" name="lastName" required><br>
-            <label>Password:</label> <input type="password" name="password"><br>
+            <label>Password:</label> <input type="password" name="password" required><br>
             <button type="submit">Save Changes</button>
             <button type="button" onclick="showForm('browse')">Cancel</button>
         </form>
@@ -100,6 +108,5 @@
             <button type="button" onclick="showForm('browse')">Cancel</button>
         </form>
     </div>
-
 </body>
 </html>
