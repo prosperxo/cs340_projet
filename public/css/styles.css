@@ -1,21 +1,32 @@
+/* General styling */
 html {
     padding: 5pt;
+    font-family: 'Press Start 2P', cursive; 
+    background-color: #1a1a1a; 
+    color: #e5e5e5; 
 }
 
+/* Title styling */
 #main_title {
     margin: 0;
-    padding: 5pt;
+    padding: 10pt;
     overflow: hidden;
-    background-color: #333333;
-    color: white;
+    background-color: #222831; 
+    color: #32e0c4; 
+    text-align: center;
+    font-size: 24px;
+    text-shadow: 0 0 5px #32e0c4, 0 0 10px #32e0c4, 0 0 20px #32e0c4; 
+    border-bottom: 3px solid #393e46;
 }
 
+/* Navigation menu styling */
 ul {
     list-style-type: none;
     margin: 0;
-    padding: 5pt;
+    padding: 0;
     overflow: hidden;
-    background-color: #333333;
+    background-color: #222831; 
+    border-top: 3px solid #393e46;
 }
   
 li {
@@ -24,13 +35,21 @@ li {
   
 li a {
     display: block;
-    color: white;
+    color: #eeeeee; 
     text-align: center;
     padding: 16px;
     text-decoration: none;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out; /
 }
   
 li a:hover {
-    background-color: #111111;
+    background-color: #32e0c4; 
+    color: #222831;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff; 
+    transform: scale(1.1); 
 }
 
+html, a {
+    cursor: url('/public/images/cursor.png'), auto;
+}
