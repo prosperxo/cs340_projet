@@ -23,6 +23,28 @@
         function deleteGame(gameID) {
             showForm('delete');
         }
+
+        function filterFunction() {
+            var input = document.getElementById("gameFilter").value.toUpperCase();
+            var table = document.getElementById("gameTable");
+            var tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                var title = (tr[i].getElementsByTagName("td")[0]);
+                var genre = (tr[i].getElementsByTagName("td")[2]);
+                var platform = (tr[i].getElementsByTagName("td")[3]);
+
+                var fullinfo = (title.textContent + " " + genre.textContent + " " + platform.textContent).toUpperCase();
+
+                if (fullinfo.includes(input)) {
+                    tr[i].style.display = "";
+                }
+                else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+
     </script>
 </head>
 
@@ -45,8 +67,9 @@
     <!-- Browse Section -->
     <div id="browse">
         <h2>Games List</h2>
+        <input type="text" placeholder="Search By Title/Genre/Platform ..." id="gameFilter" onkeyup="filterFunction()" style="width: 300px">
         <button onclick="newGame()">Add New Game</button>
-        <table border="1" cellpadding="5">
+        <table border="1" cellpadding="5" id="gameTable">
             <tr>
                 <th>Title</th>
                 <th>Release Date</th>
