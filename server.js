@@ -5,7 +5,7 @@ const mariadb = require('mariadb'); // Import MariaDB client
 const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
 
 const app = express();
-const PORT = process.env.PORT || 4529;
+const PORT = process.env.PORT || 4530;
 
 // Create MariaDB connection pool
 const pool = mariadb.createPool({
