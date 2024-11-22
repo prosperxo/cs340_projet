@@ -34,7 +34,6 @@ function updateCustomer(customerID) {
     showForm('update');
 }
 
-
 function deleteCustomer(customerID) {
     document.getElementById('deleteCustomerID').value = customerID;
     showForm('delete');

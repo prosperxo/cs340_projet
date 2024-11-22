@@ -1,7 +1,9 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path')
-const body_parser = require('body-parser')
+const bodyParser = require('body-parser')  
+const bcrypt = require('bcrypt');
+const db = require('./database/db-connector');
 
 const PORT = process.env.PORT || 4550;
 
@@ -9,6 +11,7 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Set up Handlebars
 app.engine('hbs', exphbs.engine({
@@ -24,11 +27,44 @@ app.set('view engine', 'hbs'); // Use Handlebars as the template engine
 
 // Routes
 app.get('/', (req, res) => {
-    res.render('index', {
-        js_file: 'index',
-        title: 'Game Vault - Admin Panel',
-        headerTitle: 'Game Vault Admin Panel',
-        headerDescription: 'Manage all aspects of your game library and customer interactions.'
+    // Define test queries
+    const query1 = 'DROP TABLE IF EXISTS diagnostic;';
+    const query2 = 'CREATE TABLE diagnostic(id INT PRIMARY KEY AUTO_INCREMENT, text VARCHAR(255) NOT NULL);';
+    const query3 = 'INSERT INTO diagnostic (text) VALUES ("MySQL is working for your_database!")'; // Update your_database
+    const query4 = 'SELECT * FROM diagnostic;';
+
+    // Execute queries sequentially
+    db.pool.query(query1, (err) => {
+        if (err) {
+            console.error('Error dropping table:', err);
+            return res.status(500).send('Error initializing database');
+        }
+        db.pool.query(query2, (err) => {
+            if (err) {
+                console.error('Error creating table:', err);
+                return res.status(500).send('Error initializing database');
+            }
+            db.pool.query(query3, (err) => {
+                if (err) {
+                    console.error('Error inserting data:', err);
+                    return res.status(500).send('Error initializing database');
+                }
+                db.pool.query(query4, (err, results) => {
+                    if (err) {
+                        console.error('Error selecting data:', err);
+                        return res.status(500).send('Error initializing database');
+                    }
+
+                    res.render('index', {
+                        js_file: 'index',
+                        title: 'Game Vault - Admin Panel',
+                        headerTitle: 'Game Vault Admin Panel',
+                        headerDescription: 'Manage all aspects of your game library and customer interactions.',
+                        results: JSON.stringify(results)
+                    });
+                });
+            });
+        });
     });
 });
 
@@ -46,29 +82,82 @@ app.get('/games', (req, res) => {
 });
 
 app.get('/customers', (req, res) => {
-    const customers = [
-        { id: 1, email: 'alice@example.com', firstName: 'Alice', lastName: 'Brown', signupDate: '2024-01-01' },
-        { id: 2, email: 'bob@example.com', firstName: 'Bob', lastName: 'Smith', signupDate: '2024-01-02' }
-    ];
-    res.render('customers', {
-        js_file: 'customers',
-        title: 'Manage Customers',
-        headerTitle: 'Manage Customers',
-        headerDescription: 'View, add, update, or delete customer records.',
-        customers: customers
+    db.pool.query('SELECT * FROM Customers', (err, customers) => {
+        if (err) {
+            console.error('Error fetching customers:', err);
+            res.status(500).send('Error fetching customers');
+            return;
+        }
+
+        res.render('customers', {
+            js_file: 'customers',
+            title: 'Manage Customers',
+            headerTitle: 'Manage Customers',
+            headerDescription: 'View, add, update, or delete customer records.',
+            customers: customers
+        });
     });
 });
 
-app.post('/newCustomer', (req, res) => { 
+app.post('/addCustomer', async (req, res) => { 
     const { email, password, firstName, lastName } = req.body;
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const query = `INSERT INTO Customers (email, password, firstName, lastName) VALUES (?, ?, ?, ?)`;
+
+        db.pool.query(query, [email, hashedPassword, firstName, lastName], (err) => {
+            if (err) {
+                console.error('Error adding customer:', err);
+                return res.status(500).send('Error adding customer');
+            }
+            res.redirect('/customers');
+        });
+    } catch (error) {
+        console.error('Error adding customer:', error.message);
+        res.status(500).send('Error adding customer');
+    }
 });
 
-app.post('/updateCustomer', (req, res) => { 
+app.post('/updateCustomer', async (req, res) => { 
     const { customerID, email, password, firstName, lastName } = req.body;
+
+    try {
+        let query;
+        const params = [];
+
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            query = `UPDATE Customers SET email = ?, password = ?, firstName = ?, lastName = ? WHERE customerID = ?`;
+            params.push(email, hashedPassword, firstName, lastName, customerID);
+        } else {
+            query = `UPDATE Customers SET email = ?, firstName = ?, lastName = ? WHERE customerID = ?`;
+            params.push(email, firstName, lastName, customerID);
+        }
+
+        db.pool.query(query, params, (err) => {
+            if (err) {
+                console.error('Error updating customer:', err);
+                return res.status(500).send('Error updating customer');
+            }
+            res.redirect('/customers');
+        });
+    } catch (error) {
+        console.error('Error updating customer:', error.message);
+        res.status(500).send('Error updating customer');
+    }
 });
 
 app.post('/deleteCustomer', (req, res) => { 
-    const customerID = req.body.customerID;
+    const { customerID } = req.body;
+
+    db.pool.query('DELETE FROM Customers WHERE customerID = ?', [customerID], (err) => {
+        if (err) {
+            console.error('Error deleting customer:', err);
+            return res.status(500).send('Error deleting customer');
+        }
+        res.redirect('/customers');
+    });
 });
 
 app.get('/library', (req, res) => {

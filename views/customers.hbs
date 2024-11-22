@@ -12,14 +12,14 @@
             <th>Actions</th>
         </tr>
         {{#each customers}}
-        <tr data-id="{{id}}">
+        <tr data-id="{{customerID}}">
             <td class="email">{{email}}</td>
             <td class="first-name">{{firstName}}</td>
             <td class="last-name">{{lastName}}</td>
             <td>{{signupDate}}</td>
             <td>
-                <button onclick="updateCustomer({{id}})">Edit</button>
-                <button onclick="deleteCustomer({{id}})">Delete</button>
+                <button onclick="updateCustomer({{customerID}})">Edit</button>
+                <button onclick="deleteCustomer({{customerID}})">Delete</button>
             </td>
         </tr>
         {{/each}}
