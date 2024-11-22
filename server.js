@@ -1,80 +1,43 @@
 const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const mariadb = require('mariadb'); // Import MariaDB client
-const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
+const exphbs = require('express-handlebars');
+const path = require('path')
 
-const app = express();
 const PORT = process.env.PORT || 4530;
 
-// Create MariaDB connection pool
-const pool = mariadb.createPool({
-    host: 'localhost', // Update with your database host
-    user: 'your_username', // Update with your database username
-    password: 'your_password', // Update with your database password
-    database: 'your_database', // Update with your database name
-    connectionLimit: 5
+const app = express();
+
+// Set up Handlebars
+app.engine('hbs', exphbs.engine({
+    extname: '.hbs',
+    layoutsDir: path.join(__dirname, 'views', 'layouts'), // Ensure this points to the layouts directory
+    partialsDir: path.join(__dirname, 'views', 'partials'), // Optional, if you're using partials
+    defaultLayout: 'main'
+}));
+
+app.set('views', path.join(__dirname, 'views')); // Explicitly set the views directory
+app.set('layouts', path.join(__dirname, 'views', 'layouts'));
+app.set('view engine', 'hbs'); // Use Handlebars as the template engine
+
+// Routes
+app.get('/', (req, res) => {
+    res.render('index', {
+        title: 'Game Vault - Admin Panel',
+        headerTitle: 'Game Vault Admin Panel',
+        headerDescription: 'Manage all aspects of your game library and customer interactions.'
+    });
 });
 
-// Middleware to parse JSON and URL-encoded data
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Handle Add Customer
-app.post('/addCustomer', async (req, res) => {
-    const { email, password, firstName, lastName } = req.body;
-
-    try {
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Insert customer into the database
-        const query = `INSERT INTO Customers (email, password, firstName, lastName) VALUES (?, ?, ?, ?)`;
-        const conn = await pool.getConnection();
-        await conn.query(query, [email, hashedPassword, firstName, lastName]);
-        conn.release();
-
-        res.redirect('/customers.html'); // Redirect to customer management page
-    } catch (error) {
-        console.error('Error adding customer:', error.message);
-        res.status(500).send('Error adding customer');
-    }
-});
-
-// Handle Update Customer
-app.post('/updateCustomer', async (req, res) => {
-    const { customerID, email, password, firstName, lastName } = req.body;
-
-    try {
-        let query, params;
-
-        // Hash the password only if it's provided
-        if (password) {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            query = `UPDATE Customers SET email = ?, password = ?, firstName = ?, lastName = ? WHERE customerID = ?`;
-            params = [email, hashedPassword, firstName, lastName, customerID];
-        } else {
-            query = `UPDATE Customers SET email = ?, firstName = ?, lastName = ? WHERE customerID = ?`;
-            params = [email, firstName, lastName, customerID];
-        }
-
-        const conn = await pool.getConnection();
-        await conn.query(query, params);
-        conn.release();
-
-        res.redirect('/customers.html'); // Redirect to customer management page
-    } catch (error) {
-        console.error('Error updating customer:', error.message);
-        res.status(500).send('Error updating customer');
-    }
-});
-
-// Handle all other routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.get('/customers', (req, res) => {
+    const customers = [
+        { id: 1, email: 'alice@example.com', firstName: 'Alice', lastName: 'Brown', signupDate: '2024-01-01' },
+        { id: 2, email: 'bob@example.com', firstName: 'Bob', lastName: 'Smith', signupDate: '2024-01-02' }
+    ];
+    res.render('customers', {
+        title: 'Manage Customers',
+        headerTitle: 'Manage Customers',
+        headerDescription: 'View, add, update, or delete customer records.',
+        customers: customers
+    });
 });
 
 // Start the server
