@@ -1,0 +1,50 @@
+<div id="browse">
+    <h2>Wishlist List</h2>
+    <button onclick="newWishlistItem()">Add New Wishlist Item</button>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Customer ID</th>
+            <th>Game ID</th>
+            <th>Actions</th>
+        </tr>
+        {{#each wishlist}}
+        <tr>
+            <td>{{customerId}}</td>
+            <td>{{gameId}}</td>
+            <td><button onclick="updateWishlistItem({{customerId}}, {{gameId}})">Edit</button><button onclick="deleteWishlistItem({{customerId}}, {{gameId}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
+
+<!-- Insert Section -->
+<div id="insert" style="display: none;">
+    <h2>Add to Wishlist</h2>
+    <form method="POST" action="/addWishlistItem">
+        <label>Customer ID:</label> <input type="number" name="customerID" required><br>
+        <label>Game ID:</label> <input type="number" name="gameID" required><br>
+        <button type="submit">Add to Wishlist</button>
+        <button type="button" onclick="showForm('browse')">Cancel</button>
+    </form>
+</div>
+
+<!-- Update Section -->
+<div id="update" style="display: none;">
+    <h2>Update Wishlist</h2>
+    <form method="POST" action="/updateWishlistItem">
+        <label>Customer ID:</label> <input type="number" name="customerID" required><br>
+        <label>Game ID:</label> <input type="number" name="gameID" required><br>
+        <button type="submit">Save Changes</button>
+        <button type="button" onclick="showForm('browse')">Cancel</button>
+    </form>
+</div>
+
+<!-- Delete Section -->
+<div id="delete" style="display: none;">
+    <h2>Delete from Wishlist</h2>
+    <form method="POST" action="/deleteWishlistItem">
+        <p>Are you sure you want to delete this from the wishlist?</p>
+        <button type="submit">Delete</button>
+        <button type="button" onclick="showForm('browse')">Cancel</button>
+    </form>
+</div>
