@@ -16,12 +16,17 @@
             showForm('insert'); 
         }
 
-        function updateCustomer(customerID) {
+        function updateCustomer(customerID, email, firstName, lastName) {
             showForm('update');
+            document.getElementById('updateCustomerID').value = customerID;
+            document.getElementsByName('email')[1].value = email;
+            document.getElementsByName('firstName')[1].value = firstName;
+            document.getElementsByName('lastName')[1].value = lastName;
         }
 
         function deleteCustomer(customerID) {
             showForm('delete');
+            document.getElementById('deleteCustomerID').value = customerID;
         }
 
         function filterFunction() {
@@ -44,7 +49,6 @@
                 }
             }
         }
-
     </script>
 </head>
 
@@ -77,20 +81,7 @@
                 <th>Signup Date</th>
                 <th>Actions</th>
             </tr>
-            <tr>
-                <td>alice@example.com</td>
-                <td>Alice</td>
-                <td>Brown</td>
-                <td>2024-01-01</td>
-                <td><button onclick="updateCustomer(1)">Edit</button><button onclick="deleteCustomer(1)">Delete</button></td>
-            </tr>
-            <tr>
-                <td>bob@example.com</td>
-                <td>Bob</td>
-                <td>Smith</td>
-                <td>2024-01-02</td>
-                <td><button onclick="updateCustomer(2)">Edit</button><button onclick="deleteCustomer(2)">Delete</button></td>
-            </tr>
+            <!-- Rows will be dynamically added here -->
         </table>
     </div>
 
@@ -115,7 +106,7 @@
             <label>Email:</label> <input type="email" name="email" required><br>
             <label>First Name:</label> <input type="text" name="firstName" required><br>
             <label>Last Name:</label> <input type="text" name="lastName" required><br>
-            <label>Password:</label> <input type="password" name="password" required><br>
+            <label>Password:</label> <input type="password" name="password"><br>
             <button type="submit">Save Changes</button>
             <button type="button" onclick="showForm('browse')">Cancel</button>
         </form>
@@ -131,5 +122,34 @@
             <button type="button" onclick="showForm('browse')">Cancel</button>
         </form>
     </div>
+
+    <!-- Fetching and populating customer data -->
+    <script>
+        window.onload = async function() {
+            try {
+                const response = await fetch('/getCustomers');
+                const customers = await response.json();
+
+                const table = document.getElementById('customerTable');
+                customers.forEach(customer => {
+                    const formattedDate = new Date(customer.signupDate).toISOString().split('T')[0]; // took out the time for data display
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${customer.email}</td>
+                        <td>${customer.firstName}</td>
+                        <td>${customer.lastName}</td>
+                        <td>${formattedDate}</td>
+                        <td>
+                            <button onclick="updateCustomer(${customer.customerID}, '${customer.email}', '${customer.firstName}', '${customer.lastName}')">Edit</button>
+                            <button onclick="deleteCustomer(${customer.customerID})">Delete</button>
+                        </td>
+                    `;
+                    table.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching customers:', error.message);
+            }
+        };
+    </script>
 </body>
 </html>
