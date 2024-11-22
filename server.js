@@ -1,12 +1,14 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path')
+const body_parser = require('body-parser')
 
 const PORT = process.env.PORT || 4550;
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set up Handlebars
 app.engine('hbs', exphbs.engine({
@@ -55,6 +57,18 @@ app.get('/customers', (req, res) => {
         headerDescription: 'View, add, update, or delete customer records.',
         customers: customers
     });
+});
+
+app.post('/newCustomer', (req, res) => { 
+    const { email, password, firstName, lastName } = req.body;
+});
+
+app.post('/updateCustomer', (req, res) => { 
+    const { customerID, email, password, firstName, lastName } = req.body;
+});
+
+app.post('/deleteCustomer', (req, res) => { 
+    const customerID = req.body.customerID;
 });
 
 app.get('/library', (req, res) => {

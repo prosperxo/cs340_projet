@@ -12,10 +12,10 @@
             <th>Actions</th>
         </tr>
         {{#each customers}}
-        <tr>
-            <td>{{email}}</td>
-            <td>{{firstName}}</td>
-            <td>{{lastName}}</td>
+        <tr data-id="{{id}}">
+            <td class="email">{{email}}</td>
+            <td class="first-name">{{firstName}}</td>
+            <td class="last-name">{{lastName}}</td>
             <td>{{signupDate}}</td>
             <td>
                 <button onclick="updateCustomer({{id}})">Edit</button>
@@ -44,10 +44,10 @@
     <h2>Update Customer</h2>
     <form method="POST" action="/updateCustomer">
         <input type="hidden" name="customerID" id="updateCustomerID">
-        <label>Email:</label> <input type="email" name="email" required><br>
-        <label>First Name:</label> <input type="text" name="firstName" required><br>
-        <label>Last Name:</label> <input type="text" name="lastName" required><br>
-        <label>Password:</label> <input type="password" name="password" required><br>
+        <label>Email:</label> <input type="email" name="email" id="updateEmail" required><br>
+        <label>First Name:</label> <input type="text" name="firstName" id="updateFirstName" required><br>
+        <label>Last Name:</label> <input type="text" name="lastName" id="updateLastName" required><br>
+        <label>Password:</label> <input type="password" name="password" id="updatePassword" required><br>
         <button type="submit">Save Changes</button>
         <button type="button" onclick="showForm('browse')">Cancel</button>
     </form>

@@ -10,10 +10,33 @@ function newCustomer() {
 }
 
 function updateCustomer(customerID) {
+    // Select the row using the data-id attribute
+    const row = document.querySelector(`tr[data-id="${customerID}"]`);
+
+    // Ensure the row exists before trying to access its data
+    if (!row) {
+        console.error(`Row with customerID ${customerID} not found.`);
+        return;
+    }
+
+    // Extract data from the row
+    const email = row.querySelector('.email').textContent.trim();
+    const firstName = row.querySelector('.first-name').textContent.trim();
+    const lastName = row.querySelector('.last-name').textContent.trim();
+
+    // Populate the form fields
+    document.getElementById('updateCustomerID').value = customerID;
+    document.getElementById('updateEmail').value = email;
+    document.getElementById('updateFirstName').value = firstName;
+    document.getElementById('updateLastName').value = lastName;
+
+    // Show the update form
     showForm('update');
 }
 
+
 function deleteCustomer(customerID) {
+    document.getElementById('deleteCustomerID').value = customerID;
     showForm('delete');
 }
 
