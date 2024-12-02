@@ -10,10 +10,39 @@ function newGame() {
 }
 
 function updateGame(gameID) {
+    // Select the row using the data-id attribute
+    const row = document.querySelector(`tr[data-id="${gameID}"]`);
+
+    // Ensure the row exists before trying to access its data
+    if (!row) {
+        console.error(`Row with gameID ${gameID} not found.`);
+        return;
+    }
+
+    // Extract data from the row
+    const title = row.querySelector('.title').textContent.trim();
+    const releaseDate = row.querySelector('.releaseDate').textContent.trim();
+    const genre = row.querySelector('.genre').textContent.trim();
+    const platform = row.querySelector('.platform').textContent.trim();
+    const avgRating = row.querySelector('.avgRating').textContent.trim();
+    const copiesSold = row.querySelector('.copiesSold').textContent.trim();
+
+    // Populate the form fields
+    document.getElementById('updateGameID').value = gameID;
+    document.getElementById('updateTitle').value = title;
+    document.getElementById('updateReleaseDate').value = releaseDate;
+    document.getElementById('updateGenre').value = genre;
+    document.getElementById('updatePlatform').value = platform;
+    document.getElementById('updateAvgRating').value = avgRating;
+    document.getElementById('updateCopiesSold').value = copiesSold;
+
+
+    // Show the update form
     showForm('update');
 }
 
 function deleteGame(gameID) {
+    document.getElementById('deleteGameID').value = gameID;
     showForm('delete');
 }
 

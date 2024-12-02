@@ -69,15 +69,75 @@ app.get('/', (req, res) => {
 });
 
 app.get('/games', (req, res) => {
-    const games = [
-        { id: 1, title: 'The Legend of Zelda', releaseDate: '2017-03-03', genre: 'Adventure', platform: 'Nintendo Switch', avgRating: '9.7', copiesSold: '2000000' }
-    ];
-    res.render('games', {
-        js_file: 'games',
-        title: 'Manage Games',
-        headerTitle: 'Manage Games',
-        headerDescription: 'View, add, update, or delete games records.',
-        games: games
+    db.pool.query('SELECT * FROM Games', (err, games) => {
+        if (err) {
+            console.error('Error fetching games:', err);
+            res.status(500).send('Error fetching games');
+            return;
+        }
+
+        res.render('games', {
+            js_file: 'games',
+            title: 'Manage Games',
+            headerTitle: 'Manage Games',
+            headerDescription: 'View, add, update, or delete games records.',
+            games: games
+        });
+    });
+
+});
+
+app.post('/addGame', async (req, res) => { 
+    const { title, releaseDate, genre, platform, avgRating, copiesSold } = req.body;
+
+    try {
+        const query = `INSERT INTO Games (title, releaseDate, genre, platform, avgRating, copiesSold) VALUES (?, ?, ?, ?, ?, ?)`;
+
+        db.pool.query(query, [title, releaseDate, genre, platform, avgRating, copiesSold], (err) => {
+            if (err) {
+                console.error('Error adding game:', err);
+                return res.status(500).send('Error adding game');
+            }
+            res.redirect('/games');
+        });
+    } catch (error) {
+        console.error('Error adding game:', error.message);
+        res.status(500).send('Error adding game');
+    }
+});
+
+app.post('/updateGame', async (req, res) => { 
+    const { gameID, title, releaseDate, genre, platform, avgRating, copiesSold } = req.body;
+
+    try {
+        let query;
+        const params = [];
+
+        query = `UPDATE Games SET title = ?, releaseDate = ?, genre = ?, platform = ?, avgRating = ?, copiesSold = ? WHERE gameID = ?`;
+        params.push(gameID, title, releaseDate, genre, platform, avgRating, copiesSold);
+
+        db.pool.query(query, params, (err) => {
+            if (err) {
+                console.error('Error updating game:', err);
+                return res.status(500).send('Error updating game');
+            }
+            res.redirect('/games');
+        });
+    } catch (error) {
+        console.error('Error updating game:', error.message);
+        res.status(500).send('Error updating game');
+    }
+});
+
+app.post('/deleteGame', (req, res) => { 
+    const { gameID } = req.body;
+
+    db.pool.query('DELETE FROM Games WHERE gameID = ?', [gameID], (err) => {
+        if (err) {
+            console.error('Error deleting game:', err);
+            return res.status(500).send('Error deleting game');
+        }
+        res.redirect('/games');
     });
 });
 
