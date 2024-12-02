@@ -114,7 +114,7 @@ app.post('/updateGame', async (req, res) => {
         const params = [];
 
         query = `UPDATE Games SET title = ?, releaseDate = ?, genre = ?, platform = ?, avgRating = ?, copiesSold = ? WHERE gameID = ?`;
-        params.push(gameID, title, releaseDate, genre, platform, avgRating, copiesSold);
+        params.push(title, releaseDate, genre, platform, avgRating, copiesSold, gameID);
 
         db.pool.query(query, params, (err) => {
             if (err) {
@@ -247,15 +247,73 @@ app.get('/wishlist', (req, res) => {
 });
 
 app.get('/reviews', (req, res) => {
-    const reviews = [
-        { customerId: 1, gameId: 1, rating: 9, comment: "An incredible open-world experience.", reviewDate: "2023-06-21"},
-    ];
-    res.render('reviews', {
-        js_file: 'reviews',
-        title: 'Manage Reviews',
-        headerTitle: 'Manage Review',
-        headerDescription: 'View, add, update, or delete review records.',
-        reviews: reviews
+    db.pool.query('SELECT * FROM Reviews', (err, reviews) => {
+        if (err) {
+            console.error('Error fetching reviews:', err);
+            res.status(500).send('Error fetching reviews');
+            return;
+        }
+        res.render('reviews', {
+            js_file: 'reviews',
+            title: 'Manage Reviews',
+            headerTitle: 'Manage Review',
+            headerDescription: 'View, add, update, or delete review records.',
+            reviews: reviews
+        });
+    });
+});
+
+app.post('/addReview', async (req, res) => { 
+    const { customerID, gameID, rating, comment, reviewDate} = req.body;
+
+    try {
+        const query = `INSERT INTO Reviews (customerID, gameID, rating, comment, reviewDate) VALUES (?, ?, ?, ?, ?)`;
+
+        db.pool.query(query, [customerID, gameID, rating, comment, reviewDate], (err) => {
+            if (err) {
+                console.error('Error adding review:', err);
+                return res.status(500).send('Error adding review');
+            }
+            res.redirect('/reviews');
+        });
+    } catch (error) {
+        console.error('Error adding review:', error.message);
+        res.status(500).send('Error adding review');
+    }
+});
+
+app.post('/updateReview', async (req, res) => { 
+    const { reviewID, rating, comment } = req.body;
+
+    try {
+        let query;
+        const params = [];
+
+        query = `UPDATE Reviews SET rating = ?, comment = ? WHERE reviewID = ?`;
+        params.push(rating, comment, reviewID);
+
+        db.pool.query(query, params, (err) => {
+            if (err) {
+                console.error('Error updating review:', err);
+                return res.status(500).send('Error updating review');
+            }
+            res.redirect('/reviews');
+        });
+    } catch (error) {
+        console.error('Error updating review:', error.message);
+        res.status(500).send('Error updating review');
+    }
+});
+
+app.post('/deleteReview', (req, res) => { 
+    const { reviewID } = req.body;
+
+    db.pool.query('DELETE FROM Reviews WHERE reviewID = ?', [reviewID], (err) => {
+        if (err) {
+            console.error('Error deleting review:', err);
+            return res.status(500).send('Error deleting review');
+        }
+        res.redirect('/reviews');
     });
 });
 
