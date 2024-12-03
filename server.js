@@ -390,15 +390,74 @@ app.post('/deleteSale', (req, res) => {
 });
 
 app.get('/orderItems', (req, res) => {
-    const orderItems = [
-        { saleId: 1, gameId: 1, quantity: 1, price: 59.99},
-    ];
-    res.render('orderItems', {
-        js_file: 'orderItems',
-        title: 'Manage Order Items',
-        headerTitle: 'Manage Order Items',
-        headerDescription: 'View, add, update, or delete order item records.',
-        orderItems: orderItems
+    db.pool.query('SELECT * FROM OrderItems', (err, orderItems) => {
+        if (err) {
+            console.error('Error fetching order items:', err);
+            res.status(500).send('Error fetching order items');
+            return;
+        }
+
+        res.render('orderItems', {
+            js_file: 'orderItems',
+            title: 'Manage Order Items',
+            headerTitle: 'Manage Order Items',
+            headerDescription: 'View, add, update, or delete order item records.',
+            orderItems: orderItems
+        });
+    });
+});
+
+app.post('/addOrderItem', async (req, res) => { 
+    const { saleID, gameID, quantity, price } = req.body;
+
+    try {
+        const query = `INSERT INTO OrderItems (saleID, gameID, quantity, price) VALUES (?, ?, ?, ?)`;
+
+        db.pool.query(query, [saleID, gameID, quantity, price], (err) => {
+            if (err) {
+                console.error('Error adding order item:', err);
+                return res.status(500).send('Error adding order item');
+            }
+            res.redirect('/orderItems');
+        });
+    } catch (error) {
+        console.error('Error adding order item:', error.message);
+        res.status(500).send('Error adding order item');
+    }
+});
+
+app.post('/updateOrderItem', async (req, res) => { 
+    const { orderItemID, quantity, price } = req.body;
+
+    try {
+        let query;
+        const params = [];
+
+        query = `UPDATE OrderItems SET quantity = ?, price = ? WHERE orderItemID = ?`;
+        params.push(quantity, price, orderItemID);
+
+        db.pool.query(query, params, (err) => {
+            if (err) {
+                console.error('Error updating order items:', err);
+                return res.status(500).send('Error updating order items');
+            }
+            res.redirect('/orderItems');
+        });
+    } catch (error) {
+        console.error('Error updating order item:', error.message);
+        res.status(500).send('Error updating order item');
+    }
+});
+
+app.post('/deleteOrderItem', (req, res) => { 
+    const { orderItemID } = req.body;
+
+    db.pool.query('DELETE FROM OrderItems WHERE orderItemID = ?', [orderItemID], (err) => {
+        if (err) {
+            console.error('Error deleting order item:', err);
+            return res.status(500).send('Error deleting order item');
+        }
+        res.redirect('/orderItems');
     });
 });
 
