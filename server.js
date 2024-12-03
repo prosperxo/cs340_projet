@@ -318,15 +318,74 @@ app.post('/deleteReview', (req, res) => {
 });
 
 app.get('/sales', (req, res) => {
-    const sales = [
-        { id: 1, customerId: 1, orderDate: "2023-06-21", totalAmount: 59.99},
-    ];
-    res.render('sales', {
-        js_file: 'sales',
-        title: 'Manage Sales',
-        headerTitle: 'Manage Sales',
-        headerDescription: 'View, add, update, or delete sale records.',
-        sales: sales
+    db.pool.query('SELECT * FROM Sales', (err, sales) => {
+        if (err) {
+            console.error('Error fetching sales:', err);
+            res.status(500).send('Error fetching sales');
+            return;
+        }
+
+        res.render('sales', {
+            js_file: 'sales',
+            title: 'Manage Sales',
+            headerTitle: 'Manage Sales',
+            headerDescription: 'View, add, update, or delete sale records.',
+            sales: sales
+        });
+    });
+});
+
+app.post('/addSale', async (req, res) => { 
+    const { customerID, orderDate, totalAmount } = req.body;
+
+    try {
+        const query = `INSERT INTO Sales (customerID, orderDate, totalAmount) VALUES (?, ?, ?)`;
+
+        db.pool.query(query, [customerID, orderDate, totalAmount], (err) => {
+            if (err) {
+                console.error('Error adding sale:', err);
+                return res.status(500).send('Error adding sale');
+            }
+            res.redirect('/sales');
+        });
+    } catch (error) {
+        console.error('Error adding sale:', error.message);
+        res.status(500).send('Error adding sale');
+    }
+});
+
+app.post('/updateSale', async (req, res) => { 
+    const { saleID, totalAmount } = req.body;
+
+    try {
+        let query;
+        const params = [];
+
+        query = `UPDATE Sales SET totalAmount = ? WHERE saleID = ?`;
+        params.push(totalAmount, saleID);
+
+        db.pool.query(query, params, (err) => {
+            if (err) {
+                console.error('Error updating sale:', err);
+                return res.status(500).send('Error updating sale');
+            }
+            res.redirect('/sales');
+        });
+    } catch (error) {
+        console.error('Error updating sale:', error.message);
+        res.status(500).send('Error updating sale');
+    }
+});
+
+app.post('/deleteSale', (req, res) => { 
+    const { saleID } = req.body;
+
+    db.pool.query('DELETE FROM Sales WHERE saleID = ?', [saleID], (err) => {
+        if (err) {
+            console.error('Error deleting sale:', err);
+            return res.status(500).send('Error deleting sale');
+        }
+        res.redirect('/sales');
     });
 });
 

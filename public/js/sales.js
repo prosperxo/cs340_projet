@@ -9,11 +9,29 @@ function newSale() {
     showForm('insert'); 
 }
 
-function updateSale(saleId) {
+function updateSale(saleID) {
+    // Select the row using the data-id attribute
+    const row = document.querySelector(`tr[data-id="${saleID}"]`);
+
+    // Ensure the row exists before trying to access its data
+    if (!row) {
+        console.error(`Row with saleID ${saleID} not found.`);
+        return;
+    }
+
+    // Extract data from the row
+    const totalAmount = row.querySelector('.totalAmount').textContent.trim();
+
+    // Populate the form fields
+    document.getElementById('updateSaleID').value = saleID;
+    document.getElementById('updateTotalAmount').value = totalAmount;
+
+    // Show the update form
     showForm('update');
 }
 
-function deleteSale(saleId) {
+function deleteSale(saleID) {
+    document.getElementById('deleteSaleID').value = saleID;
     showForm('delete');
 }
 
