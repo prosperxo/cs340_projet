@@ -6,45 +6,44 @@
     <link rel="stylesheet" href="../css/styles.css">
     <script>
         function showForm(action) {
-            document.getElementById('browse').style.display = (action === 'browse') ? 'block' : 'none';
-            document.getElementById('insert').style.display = (action === 'insert') ? 'block' : 'none';
-            document.getElementById('update').style.display = (action === 'update') ? 'block' : 'none';
-            document.getElementById('delete').style.display = (action === 'delete') ? 'block' : 'none';
+            // Hide all forms
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'none';
+            document.getElementById('update').style.display = 'none';
+            document.getElementById('delete').style.display = 'none';
+
+            // Show the selected form
+            if (action === 'browse') {
+                document.getElementById('browse').style.display = 'block';
+            } else if (action === 'insert') {
+                document.getElementById('insert').style.display = 'block';
+            } else if (action === 'update') {
+                document.getElementById('update').style.display = 'block';
+            } else if (action === 'delete') {
+                document.getElementById('delete').style.display = 'block';
+            }
         }
 
-        function newGame() { 
-            showForm('insert'); 
+        function newGame() {
+            showForm('insert');
         }
 
         function updateGame(gameID) {
             showForm('update');
+            const row = document.querySelector(`#gameTable tr[data-id='${gameID}']`);
+            document.getElementById('updateGameID').value = gameID;
+            document.querySelector("input[name='title']").value = row.cells[0].textContent;
+            document.querySelector("input[name='releaseDate']").value = row.cells[1].textContent;
+            document.querySelector("input[name='genre']").value = row.cells[2].textContent;
+            document.querySelector("input[name='platform']").value = row.cells[3].textContent;
+            document.querySelector("input[name='avgRating']").value = row.cells[4].textContent;
+            document.querySelector("input[name='copiesSold']").value = row.cells[5].textContent;
         }
 
         function deleteGame(gameID) {
             showForm('delete');
+            document.getElementById('deleteGameID').value = gameID;
         }
-
-        function filterFunction() {
-            var input = document.getElementById("gameFilter").value.toUpperCase();
-            var table = document.getElementById("gameTable");
-            var tr = table.getElementsByTagName("tr");
-
-            for (i = 1; i < tr.length; i++) {
-                var title = (tr[i].getElementsByTagName("td")[0]);
-                var genre = (tr[i].getElementsByTagName("td")[2]);
-                var platform = (tr[i].getElementsByTagName("td")[3]);
-
-                var fullinfo = (title.textContent + " " + genre.textContent + " " + platform.textContent).toUpperCase();
-
-                if (fullinfo.includes(input)) {
-                    tr[i].style.display = "";
-                }
-                else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
-
     </script>
 </head>
 
@@ -52,7 +51,7 @@
     <nav>
         <ul>
             <li><a href="../index.html">Home</a></li>
-            <li><a href="games.html">Manage Games</a></li>
+            <li><a href="games.html" class="active">Manage Games</a></li>
             <li><a href="customers.html">Manage Customers</a></li>
             <li><a href="library.html">Manage Library</a></li>
             <li><a href="wishlist.html">Manage Wishlist</a></li>
@@ -61,8 +60,6 @@
             <li><a href="orderItems.html">Manage Order Items</a></li>
         </ul>
     </nav>
-
-    <h1>Manage Games</h1>
 
     <!-- Browse Section -->
     <div id="browse">
@@ -79,14 +76,17 @@
                 <th>Copies Sold</th>
                 <th>Actions</th>
             </tr>
-            <tr>
+            <tr data-id="1">
                 <td>The Legend of Zelda</td>
                 <td>2017-03-03</td>
                 <td>Adventure</td>
                 <td>Nintendo Switch</td>
                 <td>9.7</td>
                 <td>2000000</td>
-                <td><button onclick="updateGame(1)">Edit</button><button onclick="deleteGame(1)">Delete</button></td>
+                <td>
+                    <button onclick="updateGame(1)" style="margin-right: 10px;">Edit</button>
+                    <button onclick="deleteGame(1)">Delete</button>
+                </td>
             </tr>
         </table>
     </div>
@@ -132,5 +132,9 @@
             <button type="button" onclick="showForm('browse')">Cancel</button>
         </form>
     </div>
+
+    <footer>
+        <p>&copy; 2024 Game Vault. All rights reserved.</p>
+    </footer>
 </body>
 </html>

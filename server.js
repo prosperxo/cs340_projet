@@ -63,7 +63,7 @@ app.post('/addCustomer', async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
 
     try {
-        // Hash the password
+        // Hash the password 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert customer into the database
