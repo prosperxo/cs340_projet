@@ -221,15 +221,68 @@ app.post('/deleteCustomer', (req, res) => {
 });
 
 app.get('/library', (req, res) => {
-    const library = [
-        { customerId: 1, gameId: 1},
-    ];
-    res.render('library', {
-        js_file: 'library',
-        title: 'Manage Libraries',
-        headerTitle: 'Manage Libraries',
-        headerDescription: 'View, add, update, or delete library records.',
-        library: library
+    db.pool.query('SELECT * FROM Library', (err, library) => {
+        if (err) {
+            console.error('Error fetching library:', err);
+            res.status(500).send('Error fetching library');
+            return;
+        }
+        res.render('library', {
+            js_file: 'library',
+            title: 'Manage Libraries',
+            headerTitle: 'Manage Libraries',
+            headerDescription: 'View, add, update, or delete library records.',
+            library: library
+        });
+    });
+});
+
+app.post('/addLibraryItem', async (req, res) => { 
+    const { customerID, gameID } = req.body;
+
+    try {
+        const query = `INSERT INTO Library (customerID, gameID) VALUES (?, ?)`;
+
+        db.pool.query(query, [customerID, gameID], (err) => {
+            if (err) {
+                console.error('Error adding library:', err);
+                return res.status(500).send('Error adding library');
+            }
+            res.redirect('/library');
+        });
+    } catch (error) {
+        console.error('Error adding library:', error.message);
+        res.status(500).send('Error adding library');
+    }
+});
+
+app.post('/updateLibraryItem', (req, res) => { 
+    const { libraryID, customerID, gameID } = req.body;
+    const [old_customerID, old_gameID] = libraryID.slice(1, -1).split(',');
+
+    const query = `UPDATE Library SET customerID = ?, gameID = ? WHERE customerID = ? AND gameID = ?`;
+    const params = [customerID, gameID, old_customerID, old_gameID];
+
+    db.pool.query(query, params, (err) => {
+        if (err) {
+            console.error('Error updating library item:', err);
+            return res.status(500).send('Error updating library item');
+        }
+        res.redirect('/library');
+    });
+});
+
+app.post('/deleteLibraryItem', (req, res) => { 
+    const { libraryID } = req.body;
+
+    const [customerID, gameID] = libraryID.slice(1, -1).split(',');
+
+    db.pool.query('DELETE FROM Library WHERE customerID = ? AND gameID = ?', [customerID, gameID], (err) => {
+        if (err) {
+            console.error('Error deleting library:', err);
+            return res.status(500).send('Error deleting library');
+        }
+        res.redirect('/library');
     });
 });
 
