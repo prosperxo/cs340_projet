@@ -234,15 +234,68 @@ app.get('/library', (req, res) => {
 });
 
 app.get('/wishlist', (req, res) => {
-    const wishlist = [
-        { customerId: 1, gameId: 1},
-    ];
-    res.render('wishlist', {
-        js_file: 'wishlist',
-        title: 'Manage Wishlists',
-        headerTitle: 'Manage Wishlists',
-        headerDescription: 'View, add, update, or delete wishlist records.',
-        wishlist: wishlist
+    db.pool.query('SELECT * FROM Wishlist', (err, wishlist) => {
+        if (err) {
+            console.error('Error fetching wishlist:', err);
+            res.status(500).send('Error fetching wishlist');
+            return;
+        }
+        res.render('wishlist', {
+            js_file: 'wishlist',
+            title: 'Manage Wishlists',
+            headerTitle: 'Manage Wishlists',
+            headerDescription: 'View, add, update, or delete wishlist records.',
+            wishlist: wishlist
+        });
+    });  
+});
+
+app.post('/addWishlistItem', async (req, res) => { 
+    const { customerID, gameID } = req.body;
+
+    try {
+        const query = `INSERT INTO Wishlist (customerID, gameID) VALUES (?, ?)`;
+
+        db.pool.query(query, [customerID, gameID], (err) => {
+            if (err) {
+                console.error('Error adding wishlist:', err);
+                return res.status(500).send('Error adding wishlist');
+            }
+            res.redirect('/wishlist');
+        });
+    } catch (error) {
+        console.error('Error adding wishlist:', error.message);
+        res.status(500).send('Error adding wishlist');
+    }
+});
+
+app.post('/updateWishlistItem', (req, res) => { 
+    const { wishlistID, customerID, gameID } = req.body;
+    const [old_customerID, old_gameID] = wishlistID.slice(1, -1).split(',');
+
+    const query = `UPDATE Wishlist SET customerID = ?, gameID = ? WHERE customerID = ? AND gameID = ?`;
+    const params = [customerID, gameID, old_customerID, old_gameID];
+
+    db.pool.query(query, params, (err) => {
+        if (err) {
+            console.error('Error updating wishlist item:', err);
+            return res.status(500).send('Error updating wishlist item');
+        }
+        res.redirect('/wishlist');
+    });
+});
+
+app.post('/deleteWishlistItem', (req, res) => { 
+    const { wishlistID } = req.body;
+
+    const [customerID, gameID] = wishlistID.slice(1, -1).split(',');
+
+    db.pool.query('DELETE FROM Wishlist WHERE customerID = ? AND gameID = ?', [customerID, gameID], (err) => {
+        if (err) {
+            console.error('Error deleting wishlist:', err);
+            return res.status(500).send('Error deleting wishlist');
+        }
+        res.redirect('/wishlist');
     });
 });
 
