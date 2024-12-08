@@ -185,13 +185,17 @@ app.post('/updateCustomer', async (req, res) => {
     try {
         let query;
         const params = [];
+        let query;
+        const params = [];
 
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);
             query = `UPDATE Customers SET email = ?, password = ?, firstName = ?, lastName = ? WHERE customerID = ?`;
             params.push(email, hashedPassword, firstName, lastName, customerID);
+            params.push(email, hashedPassword, firstName, lastName, customerID);
         } else {
             query = `UPDATE Customers SET email = ?, firstName = ?, lastName = ? WHERE customerID = ?`;
+            params.push(email, firstName, lastName, customerID);
             params.push(email, firstName, lastName, customerID);
         }
 

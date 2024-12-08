@@ -8,15 +8,7 @@ html {
 
 /* Title styling */
 #main_title {
-    margin: 0;
-    padding: 10pt;
-    overflow: hidden;
-    background-color: #222831; 
-    color: #32e0c4; 
-    text-align: center;
-    font-size: 24px;
-    text-shadow: 0 0 5px #32e0c4, 0 0 10px #32e0c4, 0 0 20px #32e0c4; 
-    border-bottom: 3px solid #393e46;
+    display: none; /* Hide the Manage Games title */
 }
 
 /* Navigation menu styling */
@@ -25,31 +17,152 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #222831; 
+    background-color: #222831;
     border-top: 3px solid #393e46;
 }
-  
+
 li {
     float: left;
 }
-  
+
 li a {
     display: block;
-    color: #eeeeee; 
+    color: #eeeeee;
     text-align: center;
     padding: 16px;
     text-decoration: none;
     font-size: 16px;
-    transition: all 0.3s ease-in-out; /
-}
-  
-li a:hover {
-    background-color: #32e0c4; 
-    color: #222831;
-    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff; 
-    transform: scale(1.1); 
+    transition: all 0.3s ease-in-out;
 }
 
+li a:hover {
+    background-color: #32e0c4;
+    color: #222831;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff;
+    transform: scale(1.1);
+}
+
+li a.active {
+    background-color: #393e46;
+    color: #32e0c4;
+    text-shadow: 0 0 10px #32e0c4;
+}
+
+/* Table styling */
+#gameTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+#gameTable td button {
+    margin-right: 10px; 
+}
+
+#gameTable td button:last-child {
+    margin-right: 0; 
+}
+
+#gameTable th, #gameTable td {
+    padding: 10px;
+    border: 1px solid #393e46;
+}
+
+#gameTable th {
+    background-color: #222831;
+    color: #32e0c4;
+    text-shadow: 0 0 5px #32e0c4;
+}
+
+#gameTable tr:nth-child(even) {
+    background-color: #1e1e1e;
+}
+
+#gameTable tr:hover {
+    background-color: #425855;
+    color: #222831;
+}
+
+/* Button styling */
+button {
+    background-color: #32e0c4;
+    color: #222831;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 50px; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #393e46;
+    color: #32e0c4;
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px #32e0c4;
+}
+
+/* Input fields */
+input[type="text"], input[type="date"], input[type="number"] {
+    background-color: #222831;
+    color: #32e0c4;
+    border: 1px solid #393e46;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    width: calc(100% - 20px);
+    margin: 10px 0;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus {
+    border-color: #32e0c4;
+    box-shadow: 0 0 10px #32e0c4;
+    outline: none;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+/* Form styling */
+form {
+    padding: 20px;
+    background-color: #1a1a1a;
+    border: 1px solid #393e46;
+    border-radius: 10px;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #222831;
+    color: #32e0c4;
+    border-top: 3px solid #393e46;
+    margin-top: 20px;
+}
+
+/* Cursor styling */
 html, a {
     cursor: url('/public/images/cursor.png'), auto;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    li {
+        width: 100%;
+    }
+
+    li a {
+        padding: 12px;
+        font-size: 14px;
+    }
 }
