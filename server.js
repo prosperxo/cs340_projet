@@ -185,8 +185,6 @@ app.post('/updateCustomer', async (req, res) => {
     try {
         let query;
         const params = [];
-        let query;
-        const params = [];
 
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);

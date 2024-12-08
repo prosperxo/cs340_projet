@@ -49,7 +49,7 @@ li a.active {
 }
 
 /* Table styling */
-#gameTable {
+#gameTable, #customerTable, #reviewTable {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -57,32 +57,89 @@ li a.active {
     text-align: left;
 }
 
-#gameTable td button {
+#saleTable {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+#libraryTable, #wishlistTable, #orderItemTable {
+    width: 40%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+#gameTable td button, 
+#customerTable td button, 
+#libraryTable td button, 
+#wishlistTable td button, 
+#reviewTable td button, 
+#saleTable td button, 
+#orderItemTable td button {
     margin-right: 10px; 
 }
 
-#gameTable td button:last-child {
+#gameTable td button:last-child, 
+#customerTable td button:last-child, 
+#libraryTable td button:last-child, 
+#wishlistTable td button:last-child, 
+#reviewTable td button:last-child, 
+#saleTable td button:last-child, 
+#orderItemTable td button:last-child {
     margin-right: 0; 
 }
 
-#gameTable th, #gameTable td {
+#gameTable th, 
+#customerTable th, 
+#libraryTable th, 
+#wishlistTable th, 
+#reviewTable th, 
+#saleTable th, 
+#orderItemTable th, 
+#gameTable td, 
+#customerTable td, 
+#libraryTable td, 
+#wishlistTable td, 
+#reviewTable td, 
+#saleTable td, 
+#orderItemTable td {
     padding: 10px;
     border: 1px solid #393e46;
 }
 
-#gameTable th {
+#gameTable th, 
+#customerTable th, 
+#libraryTable th, 
+#wishlistTable th, 
+#reviewTable th, 
+#saleTable th, 
+#orderItemTable th {
     background-color: #222831;
     color: #32e0c4;
-    text-shadow: 0 0 5px #32e0c4;
 }
 
-#gameTable tr:nth-child(even) {
+#gameTable tr:nth-child(even), 
+#customerTable tr:nth-child(even), 
+#libraryTable tr:nth-child(even), 
+#wishlistTable tr:nth-child(even), 
+#reviewTable tr:nth-child(even), 
+#saleTable tr:nth-child(even), 
+#orderItemTable tr:nth-child(even) {
     background-color: #1e1e1e;
 }
 
-#gameTable tr:hover {
+#gameTable tr:hover, 
+#customerTable tr:hover, 
+#libraryTable tr:hover, 
+#wishlistTable tr:hover, 
+#reviewTable tr:hover, 
+#saleTable tr:hover, 
+#orderItemTable tr:hover {
     background-color: #425855;
-    color: #222831;
 }
 
 /* Button styling */
