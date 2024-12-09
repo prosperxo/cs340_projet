@@ -52,9 +52,9 @@ function filterFunction() {
     var tr = table.getElementsByTagName("tr");
 
     for (i = 1; i < tr.length; i++) {
-        var title = (tr[i].getElementsByTagName("td")[0]);
-        var genre = (tr[i].getElementsByTagName("td")[2]);
-        var platform = (tr[i].getElementsByTagName("td")[3]);
+        var title = (tr[i].getElementsByTagName("td")[1]);
+        var genre = (tr[i].getElementsByTagName("td")[3]);
+        var platform = (tr[i].getElementsByTagName("td")[4]);
 
         var fullinfo = (title.textContent + " " + genre.textContent + " " + platform.textContent).toUpperCase();
 

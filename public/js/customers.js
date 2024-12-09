@@ -45,9 +45,9 @@ function filterFunction() {
     var tr = table.getElementsByTagName("tr");
 
     for (i = 1; i < tr.length; i++) {
-        var tdEmail = (tr[i].getElementsByTagName("td")[0]);
-        var tdFirstName = (tr[i].getElementsByTagName("td")[1]);
-        var tdLastName = (tr[i].getElementsByTagName("td")[2]);
+        var tdEmail = (tr[i].getElementsByTagName("td")[1]);
+        var tdFirstName = (tr[i].getElementsByTagName("td")[2]);
+        var tdLastName = (tr[i].getElementsByTagName("td")[3]);
 
         var fullinfo = (tdEmail.textContent + " " + tdFirstName.textContent + " " + tdLastName.textContent).toUpperCase();
 
