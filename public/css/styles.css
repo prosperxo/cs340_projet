@@ -82,7 +82,7 @@ li a.active {
     width: 15%; 
 }
 
-#saleTable {
+#saleTable, #orderItemTable {
     width: 80%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -90,8 +90,8 @@ li a.active {
     text-align: left;
 }
 
-#libraryTable, #wishlistTable, #orderItemTable {
-    width: 40%;
+#libraryTable, #wishlistTable {
+    width: 50%;
     border-collapse: collapse;
     margin: 20px 0;
     font-size: 16px;

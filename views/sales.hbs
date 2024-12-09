@@ -3,6 +3,7 @@
     <button onclick="newSale()">Add New Sale</button>
     <table border="1" cellpadding="5" id="saleTable">
         <tr>
+            <th>Sale ID</th>
             <th>Customer ID</th>
             <th>Order Date</th>
             <th>Total Amount</th>
@@ -10,6 +11,7 @@
         </tr>
         {{#each sales}}
         <tr data-id="{{saleID}}">
+            <td>{{saleID}}</td>
             <td>{{customerID}}</td>
             <td>{{orderDate}}</td>
             <td class="totalAmount" >{{totalAmount}}</td>

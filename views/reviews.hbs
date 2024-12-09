@@ -4,6 +4,7 @@
     <button onclick="newReview()">Add New Review</button>
     <table border="1" cellpadding="5" id="reviewTable">
         <tr>
+            <th>Review ID</th>
             <th>Customer ID</th>
             <th>Game ID</th>
             <th>Rating</th>
@@ -13,6 +14,7 @@
         </tr>
         {{#each reviews}}
         <tr data-id="{{reviewID}}">
+            <td>{{reviewID}}</td>
             <td>{{customerID}}</td>
             <td>{{gameID}}</td>
             <td class="rating">{{rating}}</td>

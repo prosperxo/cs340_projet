@@ -4,6 +4,7 @@
     <button onclick="newOrderItem()">Add New Order Item</button>
     <table border="1" cellpadding="5" id="orderItemTable">
         <tr>
+            <th>Order Item ID</th>
             <th>Sale ID</th>
             <th>Game ID</th>
             <th>Quantity</th>
@@ -12,6 +13,7 @@
         </tr>
         {{#each orderItems}}
         <tr data-id="{{orderItemID}}">
+            <td>{{orderItemID}}</td>
             <td>{{saleID}}</td>
             <td>{{gameID}}</td>
             <td class="quantity">{{quantity}}</td>
