@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt');
 const db = require('./database/db-connector');
 
-const PORT = process.env.PORT || 4550;
+const PORT = process.env.PORT || 4549;
 
 const app = express();
 
