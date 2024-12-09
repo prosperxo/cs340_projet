@@ -1,3 +1,14 @@
+// citation for all the get/post functions
+// Date 12/8/2024
+// Adapted from Explorations
+//github https://github.com/osu-cs340-ecampus/nodejs-starter-app
+
+//citation for body-parser and bcrypt
+// date 12/8/2024
+// imported external library
+// bcrypt: https://www.npmjs.com/package/bcrypt
+// bodyparser: https://www.npmjs.com/package/body-parser
+
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path')
