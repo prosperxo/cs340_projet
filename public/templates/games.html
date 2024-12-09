@@ -94,7 +94,7 @@
     <!-- Insert Section -->
     <div id="insert" style="display: none;">
         <h2>Add New Game</h2>
-        <form method="POST" action="/addGame">
+        <form method="POST" action="/addGame" id="addGameForm">
             <label>Title:</label> <input type="text" name="title" required><br>
             <label>Release Date:</label> <input type="date" name="releaseDate" required><br>
             <label>Genre:</label> <input type="text" name="genre" required><br>
@@ -136,5 +136,37 @@
     <footer>
         <p>&copy; 2024 Game Vault. All rights reserved.</p>
     </footer>
+    <script>
+        document.getElementById('addGameForm').addEventListener('submit', async function (e) {
+            e.preventDefault(); // Prevent default form submission
+            const form = e.target;
+            const formData = new FormData(form);
+    
+            // Convert FormData to JSON
+            const data = Object.fromEntries(formData.entries());
+    
+            try {
+                const response = await fetch('/addGame', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(errorData.error); // Show error pop-up
+                    return;
+                }
+    
+                const successData = await response.json();
+                alert(successData.message); // Show success pop-up
+                window.location.reload(); // Reload to see the new game in the list
+            } catch (err) {
+                console.error('An unexpected error occurred:', err);
+                alert('An unexpected error occurred. Please try again.');
+            }
+        });
+    </script>
+    
 </body>
 </html>

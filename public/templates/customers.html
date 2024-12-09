@@ -151,5 +151,49 @@
             }
         };
     </script>
+    <script>
+        // Submit form and handle responses
+        async function handleFormSubmit(e, endpoint) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+    
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+    
+                const result = await response.json();
+    
+                if (!response.ok) {
+                    // Show error message in a modal
+                    showPopUp(result.error, 'error');
+                    return;
+                }
+    
+                // Show success message
+                showPopUp(result.message, 'success');
+                window.location.reload(); // Refresh the page to reflect changes
+            } catch (err) {
+                console.error(err);
+                showPopUp('An unexpected error occurred. Please try again.', 'error');
+            }
+        }
+    
+        // Show pop-up for messages
+        function showPopUp(message, type) {
+            const popUp = document.createElement('div');
+            popUp.className = `popup ${type}`;
+            popUp.textContent = message;
+            document.body.appendChild(popUp);
+    
+            setTimeout(() => {
+                document.body.removeChild(popUp);
+            }, 3000); // Hide after 3 seconds
+        }
+    </script>
 </body>
 </html>
