@@ -4,16 +4,18 @@
     <button onclick="newGame()">Add New Game</button>
     <table border="1" cellpadding="5" id="gameTable">
         <tr>
-            <th>Title</th>
-            <th>Release Date</th>
-            <th>Genre</th>
-            <th>Platform</th>
-            <th>Avg Rating</th>
-            <th>Copies Sold</th>
-            <th>Actions</th>
+            <th class="game_id_col">Game ID</th>
+            <th class="game_title_col">Title</th>
+            <th class="game_releaseDate_col">Release Date</th>
+            <th class="game_genre_col">Genre</th>
+            <th class="game_platform_col">Platform</th>
+            <th class="game_avgRating_col">Avg Rating</th>
+            <th class="game_copiesSold_col">Copies Sold</th>
+            <th class="game_actions_col">Actions</th>
         </tr>
         {{#each games}}
         <tr data-id="{{gameID}}">
+            <td>{{gameID}}</td>
             <td class="title">{{title}}</td>
             <td class="releaseDate">{{releaseDate}}</td>
             <td class="genre">{{genre}}</td>

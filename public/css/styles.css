@@ -57,6 +57,31 @@ li a.active {
     text-align: left;
 }
 
+.game_id_col {
+    width: 7%;
+}
+.game_title_col {
+    width: 25%; 
+}
+.game_releaseDate_col {
+    width: 20%; 
+}
+.game_genre_col {
+    width: 10%;
+}
+.game_platform_col {
+    width: 10%; 
+}
+.game_avgRating_col {
+    width: 5%; 
+}
+.game_copiesSold_col {
+    width: 8%; 
+}
+.game_actions_col {
+    width: 15%; 
+}
+
 #saleTable {
     width: 80%;
     border-collapse: collapse;

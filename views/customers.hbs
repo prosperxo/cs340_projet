@@ -5,6 +5,7 @@
     <button onclick="newCustomer()">Add New Customer</button>
     <table border="1" cellpadding="5" id="customerTable">
         <tr>
+            <th>Customer ID</th>
             <th>Email</th>
             <th>First Name</th>
             <th>Last Name</th>
@@ -13,6 +14,7 @@
         </tr>
         {{#each customers}}
         <tr data-id="{{customerID}}">
+            <td>{{customerID}}</td>
             <td class="email">{{email}}</td>
             <td class="first-name">{{firstName}}</td>
             <td class="last-name">{{lastName}}</td>
