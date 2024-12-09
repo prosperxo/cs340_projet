@@ -9,3 +9,5 @@ Citation for body-parser and bcrypt are:
 - imported external library
 - bcrypt: https://www.npmjs.com/package/bcrypt
 - bodyparser: https://www.npmjs.com/package/body-parser
+
+![image](https://github.com/user-attachments/assets/2ddcc51b-524e-4b1c-8d9f-20f44df3f704)
