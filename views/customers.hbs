@@ -40,18 +40,36 @@
 </div>
 
 <!-- Update Section -->
-<div id="update" style="display: none;">
-    <h2>Update Customer</h2>
-    <form method="POST" action="/updateCustomer">
+<div id="update" style="display: none; width: 100%; margin-top: 20px;">
+    <h2 style="color: #32e0c4; margin-bottom: 20px;">Update Customer</h2>
+    <form method="POST" action="/updateCustomer" class="form">
         <input type="hidden" name="customerID" id="updateCustomerID">
-        <label>Email:</label> <input type="email" name="email" id="updateEmail" required><br>
-        <label>First Name:</label> <input type="text" name="firstName" id="updateFirstName" required><br>
-        <label>Last Name:</label> <input type="text" name="lastName" id="updateLastName" required><br>
-        <label>Password:</label> <input type="password" name="password" id="updatePassword" required><br>
-        <button type="submit">Save Changes</button>
-        <button type="button" onclick="showForm('browse')">Cancel</button>
+
+        <!-- Form Fields -->
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <label style="color: #32e0c4;">Email:</label>
+            <input type="email" name="email" id="updateEmail" required class="input">
+
+            <label style="color: #32e0c4;">Password:</label>
+            <input type="password" name="password" id="updatePassword" required class="input">
+
+            <label style="color: #32e0c4;">First Name:</label>
+            <input type="text" name="firstName" id="updateFirstName" required class="input">
+
+            <label style="color: #32e0c4;">Last Name:</label>
+            <input type="text" name="lastName" id="updateLastName" required class="input">
+
+            
+        </div>
+
+        <!-- Buttons -->
+        <div style="display: flex; justify-content: flex-start; gap: 10px; margin-top: 20px;">
+            <button type="submit" class="button">Save Changes</button>
+            <button type="button" onclick="showForm('browse')" class="button cancel-button">Cancel</button>
+        </div>
     </form>
 </div>
+
 
 <!-- Delete Section -->
 <div id="delete" style="display: none;">
