@@ -5,7 +5,7 @@ Citation for the get/post functions are:
 - github https://github.com/osu-cs340-ecampus/nodejs-starter-app
 
 Citation for body-parser and bcrypt are:
-// date 12/8/2024
-// imported external library
-// bcrypt: https://www.npmjs.com/package/bcrypt
-// bodyparser: https://www.npmjs.com/package/body-parser
+- date 12/8/2024
+- imported external library
+- bcrypt: https://www.npmjs.com/package/bcrypt
+- bodyparser: https://www.npmjs.com/package/body-parser
