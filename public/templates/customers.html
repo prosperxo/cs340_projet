@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Customers</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script>
+        function showForm(action) {
+            document.getElementById('browse').style.display = (action === 'browse') ? 'block' : 'none';
+            document.getElementById('insert').style.display = (action === 'insert') ? 'block' : 'none';
+            document.getElementById('update').style.display = (action === 'update') ? 'block' : 'none';
+            document.getElementById('delete').style.display = (action === 'delete') ? 'block' : 'none';
+        }
+
+        function newCustomer() { 
+            showForm('insert'); 
+        }
+
+        function updateCustomer(customerID, email, firstName, lastName) {
+            showForm('update');
+            document.getElementById('updateCustomerID').value = customerID;
+            document.getElementsByName('email')[1].value = email;
+            document.getElementsByName('firstName')[1].value = firstName;
+            document.getElementsByName('lastName')[1].value = lastName;
+        }
+
+        function deleteCustomer(customerID) {
+            showForm('delete');
+            document.getElementById('deleteCustomerID').value = customerID;
+        }
+
+        function filterFunction() {
+            var input = document.getElementById("customerFilter").value.toUpperCase();
+            var table = document.getElementById("customerTable");
+            var tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                var tdEmail = (tr[i].getElementsByTagName("td")[0]);
+                var tdFirstName = (tr[i].getElementsByTagName("td")[1]);
+                var tdLastName = (tr[i].getElementsByTagName("td")[2]);
+
+                var fullinfo = (tdEmail.textContent + " " + tdFirstName.textContent + " " + tdLastName.textContent).toUpperCase();
+
+                if (fullinfo.includes(input)) {
+                    tr[i].style.display = "";
+                }
+                else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</head>
+
+<body onload="showForm('browse')">
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="games.html">Manage Games</a></li>
+            <li><a href="customers.html">Manage Customers</a></li>
+            <li><a href="library.html">Manage Library</a></li>
+            <li><a href="wishlist.html">Manage Wishlist</a></li>
+            <li><a href="reviews.html">Manage Reviews</a></li>
+            <li><a href="sales.html">Manage Sales</a></li>
+            <li><a href="orderItems.html">Manage Order Items</a></li>
+        </ul>
+    </nav>
+
+    <h1>Manage Customers</h1>
+
+    <!-- Browse Section -->
+    <div id="browse">
+        <h2>Customer List</h2>
+        <input type="text" placeholder="Search By Name/Email ..." id="customerFilter" onkeyup="filterFunction()" style="width: 300px">
+        <button onclick="newCustomer()">Add New Customer</button>
+        <table border="1" cellpadding="5" id="customerTable">
+            <tr>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Signup Date</th>
+                <th>Actions</th>
+            </tr>
+            <!-- Rows will be dynamically added here -->
+        </table>
+    </div>
+
+    <!-- Insert Section -->
+    <div id="insert" style="display: none;">
+        <h2>Add New Customer</h2>
+        <form method="POST" action="/addCustomer">
+            <label>Email:</label> <input type="email" name="email" required><br>
+            <label>Password:</label> <input type="password" name="password" required><br>
+            <label>First Name:</label> <input type="text" name="firstName" required><br>
+            <label>Last Name:</label> <input type="text" name="lastName" required><br>
+            <button type="submit">Add Customer</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Update Section -->
+    <div id="update" style="display: none;">
+        <h2>Update Customer</h2>
+        <form method="POST" action="/updateCustomer">
+            <input type="hidden" name="customerID" id="updateCustomerID">
+            <label>Email:</label> <input type="email" name="email" required><br>
+            <label>First Name:</label> <input type="text" name="firstName" required><br>
+            <label>Last Name:</label> <input type="text" name="lastName" required><br>
+            <label>Password:</label> <input type="password" name="password"><br>
+            <button type="submit">Save Changes</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Delete Section -->
+    <div id="delete" style="display: none;">
+        <h2>Delete Customer</h2>
+        <form method="POST" action="/deleteCustomer">
+            <input type="hidden" name="customerID" id="deleteCustomerID">
+            <p>Are you sure you want to delete this customer?</p>
+            <button type="submit">Delete</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Fetching and populating customer data -->
+    <script>
+        window.onload = async function() {
+            try {
+                const response = await fetch('/getCustomers');
+                const customers = await response.json();
+
+                const table = document.getElementById('customerTable');
+                customers.forEach(customer => {
+                    const formattedDate = new Date(customer.signupDate).toISOString().split('T')[0]; // took out the time for data display
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${customer.email}</td>
+                        <td>${customer.firstName}</td>
+                        <td>${customer.lastName}</td>
+                        <td>${formattedDate}</td>
+                        <td>
+                            <button onclick="updateCustomer(${customer.customerID}, '${customer.email}', '${customer.firstName}', '${customer.lastName}')">Edit</button>
+                            <button onclick="deleteCustomer(${customer.customerID})">Delete</button>
+                        </td>
+                    `;
+                    table.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching customers:', error.message);
+            }
+        };
+    </script>
+    <script>
+        // Submit form and handle responses
+        async function handleFormSubmit(e, endpoint) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+    
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+    
+                const result = await response.json();
+    
+                if (!response.ok) {
+                    // Show error message in a modal
+                    showPopUp(result.error, 'error');
+                    return;
+                }
+    
+                // Show success message
+                showPopUp(result.message, 'success');
+                window.location.reload(); // Refresh the page to reflect changes
+            } catch (err) {
+                console.error(err);
+                showPopUp('An unexpected error occurred. Please try again.', 'error');
+            }
+        }
+    
+        // Show pop-up for messages
+        function showPopUp(message, type) {
+            const popUp = document.createElement('div');
+            popUp.className = `popup ${type}`;
+            popUp.textContent = message;
+            document.body.appendChild(popUp);
+    
+            setTimeout(() => {
+                document.body.removeChild(popUp);
+            }, 3000); // Hide after 3 seconds
+        }
+    </script>
+</body>
+</html>

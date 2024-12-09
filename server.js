@@ -173,25 +173,34 @@ app.get('/customers', (req, res) => {
 app.post('/addCustomer', async (req, res) => { 
     const { email, password, firstName, lastName } = req.body;
 
+    if (!email || !password || !firstName || !lastName) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
+
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const query = `INSERT INTO Customers (email, password, firstName, lastName) VALUES (?, ?, ?, ?)`;
 
         db.pool.query(query, [email, hashedPassword, firstName, lastName], (err) => {
             if (err) {
+                return res.status(500).json({ error: 'Error adding customer. Please try again.' });
                 console.error('Error adding customer:', err);
                 return res.status(500).send('Error adding customer');
             }
             res.redirect('/customers');
         });
     } catch (error) {
-        console.error('Error adding customer:', error.message);
-        res.status(500).send('Error adding customer');
+        res.status(500).json({ error: 'Error adding customer. Please try again.' });
     }
 });
 
 app.post('/updateCustomer', async (req, res) => { 
     const { customerID, email, password, firstName, lastName } = req.body;
+
+    if (!customerID || !email || !firstName || !lastName) {
+        res.status(400).send('Customer ID, email, first name, and last name are required.');
+        return;
+    }
 
     try {
         let query;
@@ -213,16 +222,20 @@ app.post('/updateCustomer', async (req, res) => {
                 console.error('Error updating customer:', err);
                 return res.status(500).send('Error updating customer');
             }
+            res.status(200).json({ message: 'Customer updated successfully!' });
             res.redirect('/customers');
         });
     } catch (error) {
-        console.error('Error updating customer:', error.message);
-        res.status(500).send('Error updating customer');
+        res.status(500).json({ error: 'Error updating customer. Please try again.' });
     }
 });
 
 app.post('/deleteCustomer', (req, res) => { 
     const { customerID } = req.body;
+
+    if (!customerID) {
+        return res.status(400).json({ error: 'Customer ID is required.' });
+    }
 
     db.pool.query('DELETE FROM Customers WHERE customerID = ?', [customerID], (err) => {
         if (err) {

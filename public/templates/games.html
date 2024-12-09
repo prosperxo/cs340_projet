@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Games</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script>
+        function showForm(action) {
+            // Hide all forms
+            document.getElementById('browse').style.display = 'none';
+            document.getElementById('insert').style.display = 'none';
+            document.getElementById('update').style.display = 'none';
+            document.getElementById('delete').style.display = 'none';
+
+            // Show the selected form
+            if (action === 'browse') {
+                document.getElementById('browse').style.display = 'block';
+            } else if (action === 'insert') {
+                document.getElementById('insert').style.display = 'block';
+            } else if (action === 'update') {
+                document.getElementById('update').style.display = 'block';
+            } else if (action === 'delete') {
+                document.getElementById('delete').style.display = 'block';
+            }
+        }
+
+        function newGame() {
+            showForm('insert');
+        }
+
+        function updateGame(gameID) {
+            showForm('update');
+            const row = document.querySelector(`#gameTable tr[data-id='${gameID}']`);
+            document.getElementById('updateGameID').value = gameID;
+            document.querySelector("input[name='title']").value = row.cells[0].textContent;
+            document.querySelector("input[name='releaseDate']").value = row.cells[1].textContent;
+            document.querySelector("input[name='genre']").value = row.cells[2].textContent;
+            document.querySelector("input[name='platform']").value = row.cells[3].textContent;
+            document.querySelector("input[name='avgRating']").value = row.cells[4].textContent;
+            document.querySelector("input[name='copiesSold']").value = row.cells[5].textContent;
+        }
+
+        function deleteGame(gameID) {
+            showForm('delete');
+            document.getElementById('deleteGameID').value = gameID;
+        }
+    </script>
+</head>
+
+<body onload="showForm('browse')">
+    <nav>
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="games.html" class="active">Manage Games</a></li>
+            <li><a href="customers.html">Manage Customers</a></li>
+            <li><a href="library.html">Manage Library</a></li>
+            <li><a href="wishlist.html">Manage Wishlist</a></li>
+            <li><a href="reviews.html">Manage Reviews</a></li>
+            <li><a href="sales.html">Manage Sales</a></li>
+            <li><a href="orderItems.html">Manage Order Items</a></li>
+        </ul>
+    </nav>
+
+    <!-- Browse Section -->
+    <div id="browse">
+        <h2>Games List</h2>
+        <input type="text" placeholder="Search By Title/Genre/Platform ..." id="gameFilter" onkeyup="filterFunction()" style="width: 300px">
+        <button onclick="newGame()">Add New Game</button>
+        <table border="1" cellpadding="5" id="gameTable">
+            <tr>
+                <th>Title</th>
+                <th>Release Date</th>
+                <th>Genre</th>
+                <th>Platform</th>
+                <th>Avg Rating</th>
+                <th>Copies Sold</th>
+                <th>Actions</th>
+            </tr>
+            <tr data-id="1">
+                <td>The Legend of Zelda</td>
+                <td>2017-03-03</td>
+                <td>Adventure</td>
+                <td>Nintendo Switch</td>
+                <td>9.7</td>
+                <td>2000000</td>
+                <td>
+                    <button onclick="updateGame(1)" style="margin-right: 10px;">Edit</button>
+                    <button onclick="deleteGame(1)">Delete</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Insert Section -->
+    <div id="insert" style="display: none;">
+        <h2>Add New Game</h2>
+        <form method="POST" action="/addGame" id="addGameForm">
+            <label>Title:</label> <input type="text" name="title" required><br>
+            <label>Release Date:</label> <input type="date" name="releaseDate" required><br>
+            <label>Genre:</label> <input type="text" name="genre" required><br>
+            <label>Platform:</label> <input type="text" name="platform" required><br>
+            <label>Avg Rating:</label> <input type="number" step="0.1" min="0" max="10" name="avgRating" required><br>
+            <label>Copies Sold:</label> <input type="number" name="copiesSold" required><br>
+            <button type="submit">Add Game</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Update Section -->
+    <div id="update" style="display: none;">
+        <h2>Update Game</h2>
+        <form method="POST" action="/updateGame">
+            <input type="hidden" name="gameID" id="updateGameID">
+            <label>Title:</label> <input type="text" name="title" required><br>
+            <label>Release Date:</label> <input type="date" name="releaseDate" required><br>
+            <label>Genre:</label> <input type="text" name="genre" required><br>
+            <label>Platform:</label> <input type="text" name="platform" required><br>
+            <label>Avg Rating:</label> <input type="number" step="0.1" min="0" max="10" name="avgRating" required><br>
+            <label>Copies Sold:</label> <input type="number" name="copiesSold" required><br>
+            <button type="submit">Save Changes</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Delete Section -->
+    <div id="delete" style="display: none;">
+        <h2>Delete Game</h2>
+        <form method="POST" action="/deleteGame">
+            <input type="hidden" name="gameID" id="deleteGameID">
+            <p>Are you sure you want to delete this game?</p>
+            <button type="submit">Delete</button>
+            <button type="button" onclick="showForm('browse')">Cancel</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Game Vault. All rights reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('addGameForm').addEventListener('submit', async function (e) {
+            e.preventDefault(); // Prevent default form submission
+            const form = e.target;
+            const formData = new FormData(form);
+    
+            // Convert FormData to JSON
+            const data = Object.fromEntries(formData.entries());
+    
+            try {
+                const response = await fetch('/addGame', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(errorData.error); // Show error pop-up
+                    return;
+                }
+    
+                const successData = await response.json();
+                alert(successData.message); // Show success pop-up
+                window.location.reload(); // Reload to see the new game in the list
+            } catch (err) {
+                console.error('An unexpected error occurred:', err);
+                alert('An unexpected error occurred. Please try again.');
+            }
+        });
+    </script>
+    
+</body>
+</html>
